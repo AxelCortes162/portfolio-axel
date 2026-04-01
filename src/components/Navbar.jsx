@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import logoCompleto from '../assets/logo.png';
-import "../styles/navbar.css";
+import "../styles/Navbar.css";
 
 function Navbar() {
   return (
