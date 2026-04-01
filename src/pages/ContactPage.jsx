@@ -100,59 +100,63 @@ function ContactPage() {
       <Navbar />
       <main className="page-center">
         <div className="contacto-full">
-          {/* Usamos tu componente Card pero con estilo inmersivo */}
           <Card title="¡Hablemos de tu próximo proyecto!">
             <form className="formulario" onSubmit={handleSubmit}>
               
               <div className="campo">
-                <label><FaUser /> Nombre Completo</label>
-                <input type="text" name="name" placeholder="Ej. Axel Cortes" />
+                <label>
+                  <i className='bx bx-user'></i> Nombre Completo
+                </label>
+                <input type="text" name="name" placeholder="Ej. Axel Cortes" required />
               </div>
               
               <div className="campo">
-                <label><FaEnvelope /> Email</label>
-                <input type="email" name="email" placeholder="correo@ejemplo.com" />
+                <label>
+                  <i className='bx bx-envelope'></i> Email
+                </label>
+                <input type="email" name="email" placeholder="correo@ejemplo.com" required />
               </div>
 
               <div className="campo">
-                <label><FaPhoneAlt /> Celular (10 dígitos)</label>
+                <label>
+                  <i className='bx bx-phone'></i> Celular (10 dígitos)
+                </label>
                 <input 
                   type="text" 
                   name="phone" 
                   placeholder="5512345678" 
                   maxLength="10"
-                  onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) e.preventDefault();
-                  }}
+                  required
+                  onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
                 />
               </div>
               
               <div className="campo">
-                <label>Mensaje</label>
-                <textarea name="message" rows="4" placeholder="¿En qué puedo ayudarte?"></textarea>
+                <label>
+                  <i className='bx bx-message-detail'></i> Mensaje
+                </label>
+                <textarea name="message" rows="4" placeholder="¿En qué puedo ayudarte?" required></textarea>
               </div>
               
               <button type="submit" className="btn-enviar" disabled={enviando}>
                 {enviando ? (
                   <span className="spinner-loader"></span>
                 ) : (
-                  <><FaPaperPlane /> ENVIAR MENSAJE</>
+                  <>ENVIAR MENSAJE <i className='bx bx-send'></i></>
                 )}
               </button>
             </form>
 
-            <div className="whatsapp-divider">
-               <span>O TAMBIÉN</span>
-            </div>
+            <div className="whatsapp-divider"><span>O TAMBIÉN</span></div>
 
             <div className="whatsapp-section">
               <a 
-                href="https://wa.me/525586694753?text=¡Hola!%20Estoy%20interesado%20en%20tu%20trabajo%20como%20desarrollador." 
+                href="https://wa.me/525586694753?text=¡Hola!%20Estoy%20interesado%20en%20tu%20trabajo." 
                 target="_blank" 
                 rel="noreferrer"
                 className="btn-whatsapp"
               >
-                <FaWhatsapp /> CONTACTO POR WHATSAPP
+                <i className='bx bxl-whatsapp'></i> CONTACTO POR WHATSAPP
               </a>
             </div>
           </Card>

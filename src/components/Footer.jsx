@@ -15,13 +15,13 @@ function Footer() {
 
         {/* Lado Derecho: Redes */}
         <div className="footer-links">
-          <a href="https://github.com/tu-usuario" target="_blank" rel="noreferrer" title="GitHub">
+          <a href="https://github.com/AxelCortes162" target="_blank" rel="noreferrer" title="GitHub">
             <FaGithub />
           </a>
-          <a href="https://linkedin.com/in/tu-perfil" target="_blank" rel="noreferrer" title="LinkedIn">
+          <a href="https://www.linkedin.com/in/axel-alejandro-cortes-fonseca/" target="_blank" rel="noreferrer" title="LinkedIn">
             <FaLinkedin />
           </a>
-          <a href="mailto:tu-correo@gmail.com" title="Email">
+          <a href="mailto:axelcortes.developer@gmail.com" title="Email">
             <FaEnvelope />
           </a>
         </div>

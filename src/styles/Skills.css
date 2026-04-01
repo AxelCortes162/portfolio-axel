@@ -1,14 +1,16 @@
+/* --- SECCIÓN DE SKILLS --- */
 .skills-section {
-  padding: 80px 0;
+  padding: 100px 0;
   text-align: center;
 }
 
 .skills-section h2 {
-  font-size: 36px;
+  font-size: clamp(30px, 5vw, 36px); /* Tamaño responsivo */
   color: #00ffd5;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 15px rgba(0, 255, 213, 0.3);
 }
 
 .skills-container {
@@ -16,96 +18,122 @@
   justify-content: center;
   gap: 30px;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Tarjetas por categoría */
+/* Tarjetas de Categoría */
 .skills-category {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(0, 255, 213, 0.2);
-  padding: 30px;
-  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.6); /* Color pizarra profundo */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 213, 0.1);
+  padding: 40px 30px;
+  border-radius: 24px;
   width: 100%;
-  max-width: 450px;
-  transition: 0.3s;
+  max-width: 500px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.skills-category::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffd5, transparent);
+  opacity: 0.5;
 }
 
 .skills-category:hover {
-  border-color: #00ffd5;
-  box-shadow: 0 0 20px rgba(0, 255, 213, 0.1);
-  transform: translateY(-5px);
+  transform: translateY(-10px);
+  border-color: rgba(0, 255, 213, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+              0 0 20px rgba(0, 255, 213, 0.1);
 }
 
 .skills-category h3 {
   color: #fff;
-  margin-bottom: 25px;
-  font-size: 20px;
-  border-bottom: 2px solid rgba(0, 255, 213, 0.5);
-  display: inline-block;
-  padding-bottom: 5px;
+  margin-bottom: 35px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-/* Lista de etiquetas (píldoras) */
+/* Contenedor de etiquetas */
 .skills-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
   justify-content: center;
 }
 
+/* Píldoras / Etiquetas de Skills */
 .skill-tag {
-  background: rgba(0, 255, 213, 0.1);
-  color: #00ffd5;
-  padding: 8px 16px;
-  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 255, 213, 0.03);
+  color: #e2e8f0;
+  padding: 10px 18px;
+  border-radius: 14px;
   font-size: 14px;
-  font-weight: bold;
-  border: 1px solid rgba(0, 255, 213, 0.3);
-  transition: 0.3s;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  cursor: default;
 }
 
+/* Estilo para el Icono de Boxicons */
+.skill-icon {
+  font-size: 22px; /* Tamaño del icono */
+  color: #00ffd5;
+  transition: transform 0.3s ease;
+}
+
+/* Hover en la etiqueta individual */
 .skill-tag:hover {
   background: #00ffd5;
-  color: #020617;
-  box-shadow: 0 0 15px #00ffd5;
+  color: #020617; /* Texto oscuro para contraste */
+  border-color: #00ffd5;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 213, 0.4);
 }
 
-/* --- AJUSTES ESPECÍFICOS PARA MÓVIL --- */
+.skill-tag:hover .skill-icon {
+  color: #020617; /* El icono también cambia a oscuro */
+  transform: rotate(10deg);
+}
+
+/* --- AJUSTES MÓVILES --- */
 @media (max-width: 768px) {
-  .hero-fullscreen {
-    padding: 0 20px; /* Menos espacio a los lados para aprovechar el ancho */
-    justify-content: center; /* Centrado vertical total */
+  .skills-section {
+    padding: 60px 20px;
   }
 
-  .hero-container {
-    flex-direction: column; /* Foto arriba, texto abajo */
-    gap: 25px; /* Espacio moderado entre elementos */
-    text-align: center; /* Todo el texto al centro */
+  .skills-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 
-  .hero-img {
-    width: 160px; /* Tamaño ideal para que no tape todo el texto */
-    height: 160px;
-    border-width: 3px; /* Un poco más delgado el borde para balancear */
+  .skills-category {
+    padding: 30px 20px;
+    width: 100%;
   }
 
-  .hero-text h1 {
-    font-size: 38px; /* Tamaño grande pero que no se corte */
-    line-height: 1.1;
+  .skill-tag {
+    padding: 8px 14px;
+    font-size: 13px;
   }
-
-  .hero-text h2 {
+  
+  .skill-icon {
     font-size: 18px;
-    margin-bottom: 15px;
-  }
-
-  .hero-bio {
-    font-size: 14px; /* Un poco más pequeña para que quepa bien */
-    padding: 0 10px; /* Margen interno para que no toque los bordes */
-  }
-
-  /* Ajuste de la flecha indicadora */
-  .scroll-indicator {
-    bottom: 20px;
-    transform: scale(0.8); /* La hacemos un poquito más pequeña */
   }
 }
