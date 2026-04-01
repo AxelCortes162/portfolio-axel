@@ -6,7 +6,7 @@ import About from "./sections/About";
 import Skills from "./sections/Skills";
 import Education from "./sections/Education";
 import Projects from "./sections/Projects";
-import ContactPage from "./pages/ContactPage"; // La nueva página
+import ContactPage from "./pages/ContactPage";
 import { personalInfo } from "./data/info";
 import "./index.css";
 import "../src/styles/global.css";
