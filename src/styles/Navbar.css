@@ -1,0 +1,51 @@
+/* Estilo de la Barra Superior */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 80px;
+  background: rgba(10, 15, 26, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+/* El logo grande como lo pediste */
+.logo-img {
+  height: 80px;
+  width: auto;
+  transition: .3s;
+}
+
+.logo-img:hover {
+  transform: scale(1.05);
+}
+
+/* Menú de navegación */
+.menu {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li a {
+  color: white;
+  text-decoration: none;
+  transition: .3s;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.menu li a:hover {
+  color: #00ffd5;
+  text-shadow: 0 0 8px #00ffd5;
+}

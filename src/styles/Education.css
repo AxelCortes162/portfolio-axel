@@ -1,0 +1,100 @@
+.education-section {
+  padding: 100px 0;
+  text-align: center;
+}
+
+.education-section h2 {
+  font-size: 36px;
+  color: #00ffd5;
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* Línea central */
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  background: rgba(0, 255, 213, 0.3);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -1px;
+}
+
+.timeline-item {
+  padding: 10px 40px;
+  position: relative;
+  background: inherit;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+/* El círculo en la línea */
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  right: -8px;
+  background-color: #020617;
+  border: 3px solid #00ffd5;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: 0 0 10px #00ffd5;
+}
+
+/* Izquierda y Derecha */
+.left { left: 0; text-align: right; }
+.right { left: 50%; text-align: left; }
+.right::after { left: -8px; }
+
+.timeline-content {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.timeline-content:hover {
+  border-color: #00ffd5;
+  background: rgba(0, 255, 213, 0.05);
+}
+
+.timeline-content h3 {
+  color: #00ffd5;
+  margin: 0 0 5px 0;
+  font-size: 18px;
+}
+
+.timeline-content h4 {
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.timeline-content .fecha {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  font-weight: bold;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .timeline::after { left: 31px; }
+  .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; text-align: left; }
+  .timeline-item::after { left: 22px; }
+  .right { left: 0%; }
+}

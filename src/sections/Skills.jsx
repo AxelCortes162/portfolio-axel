@@ -1,30 +1,37 @@
-import Card from "../components/Card"
-import { skills } from "../data/info"
+import React from 'react';
+import "../styles/Skills.css";
 
-function Skills(){
+function Skills() {
+  const webSkills = ["HTML5", "CSS3", "JavaScript", "React", "Tailwind CSS", "Vite"];
+  const gameSkills = ["C#", "Unity", "Virtual Reality (VR)", "Mobile Games", "Game Design"];
 
-  return(
+  return (
+    <section id="skills" className="skills-section">
+      <h2>Habilidades Técnicas</h2>
+      
+      <div className="skills-container">
+        {/* Categoría Web */}
+        <div className="skills-category">
+          <h3>Web Development</h3>
+          <div className="skills-list">
+            {webSkills.map((skill, index) => (
+              <span key={index} className="skill-tag">{skill}</span>
+            ))}
+          </div>
+        </div>
 
-    <Card title="Skills">
-
-      <div className="skills">
-
-        {skills.map(skill => (
-
-          <span className="skill" key={skill}>
-
-            {skill}
-
-          </span>
-
-        ))}
-
+        {/* Categoría Videojuegos */}
+        <div className="skills-category">
+          <h3>Unity & Game Dev</h3>
+          <div className="skills-list">
+            {gameSkills.map((skill, index) => (
+              <span key={index} className="skill-tag">{skill}</span>
+            ))}
+          </div>
+        </div>
       </div>
-
-    </Card>
-
-  )
-
+    </section>
+  );
 }
 
-export default Skills
+export default Skills;

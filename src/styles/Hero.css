@@ -1,0 +1,150 @@
+/* --- HERO FULLSCREEN --- */
+.hero-fullscreen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0 10%;
+  box-sizing: border-box;
+}
+
+.hero-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centramos todo el contenido */
+  gap: clamp(40px, 5vw, 80px); /* Gap responsivo */
+  max-width: 1400px;
+  z-index: 2;
+  width: 100%;
+}
+
+/* --- ESTILO CIRCULAR DE LA FOTO (REINCORPORADO) --- */
+.hero-visual {
+  flex-shrink: 0; /* Evita que la foto se comprima */
+}
+
+.hero-img {
+  width: clamp(180px, 20vw, 250px); /* Tamaño responsivo */
+  height: clamp(180px, 20vw, 250px);
+  border-radius: 50%; /* Círculo perfecto */
+  border: 4px solid #00ffd5;
+  /* Glow neón intenso original */
+  box-shadow: 0 0 30px rgba(0, 255, 213, 0.6), 
+              inset 0 0 15px rgba(0, 255, 213, 0.4);
+  object-fit: cover;
+  transition: 0.4s ease;
+}
+
+.hero-img:hover {
+  transform: scale(1.05) rotate(3deg);
+  box-shadow: 0 0 50px rgba(0, 255, 213, 0.8);
+}
+
+/* --- TEXTOS DEL HERO --- */
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: clamp(40px, 7vw, 70px);
+  color: #00ffd5;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  text-shadow: 0 0 15px rgba(0, 255, 213, 0.3);
+}
+
+.hero-text h2 {
+  font-size: clamp(18px, 3vw, 26px);
+  color: #fff;
+  opacity: 0.8;
+  font-weight: 300;
+  margin: 10px 0 25px 0;
+  letter-spacing: 1px;
+}
+
+/* El Sobre mí sutil */
+.hero-bio {
+  color: #a0aec0;
+  line-height: 1.6;
+  font-size: 16px;
+  margin: 0;
+}
+
+.hero-bio span {
+  color: #00ffd5;
+  font-weight: bold;
+}
+
+/* --- INDICADOR DE SCROLL ANIMADO --- */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0.7;
+}
+
+.mouse {
+  width: 26px;
+  height: 42px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.wheel {
+  width: 4px;
+  height: 9px;
+  background: #00ffd5;
+  border-radius: 2px;
+  animation: scroll-wheel 1.6s infinite;
+}
+
+.arrow span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid #00ffd5;
+  border-right: 2px solid #00ffd5;
+  transform: rotate(45deg);
+  margin: -6px;
+  animation: arrow-down 2s infinite;
+}
+
+/* Animaciones */
+@keyframes scroll-wheel {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(18px); opacity: 0; }
+}
+
+@keyframes arrow-down {
+  0% { opacity: 0; transform: rotate(45deg) translate(-10px, -10px); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(45deg) translate(10px, 10px); }
+}
+
+/* --- RESPONSIVO CELULAR --- */
+@media (max-width: 768px) {
+  .hero-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+  
+  .hero-img {
+    width: 180px;
+    height: 180px;
+  }
+}

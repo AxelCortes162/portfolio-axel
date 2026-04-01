@@ -1,22 +1,20 @@
-function Navbar(){
+import { Link } from "react-router-dom";
+import logoCompleto from '../assets/LogoCompleto.png';
+import "../styles/navbar.css";
 
-  return(
-
+function Navbar() {
+  return (
     <nav className="navbar">
-
-      <h2 className="logo">AXEL CORTES</h2>
-
+      <Link to="/">
+        <img src={logoCompleto} className="logo-img" alt="Logo" />
+      </Link>
       <ul className="menu">
-        <li>Sobre mí</li>
-        <li>Skills</li>
-        <li>Formación</li>
-        <li>Proyectos</li>
+        <li><Link to="/">Inicio</Link></li>
+        <li><a href="/#about">Sobre mí</a></li>
+        <li><a href="/#skills">Skills</a></li>
+        <li><Link to="/contacto">Contacto</Link></li>
       </ul>
-
     </nav>
-
-  )
-
+  );
 }
-
-export default Navbar
+export default Navbar;

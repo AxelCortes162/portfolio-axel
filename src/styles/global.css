@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* 1. RESET Y CONFIGURACIÓN BASE */
 * {
   margin: 0;
   padding: 0;
@@ -8,30 +7,25 @@
 }
 
 body {
-  margin: 0;
   font-family: Arial, sans-serif;
-  /* Tu gradiente original */
   background: radial-gradient(circle at top, #0f172a, #020617);
   color: white;
-  min-height: 100vh;
-  overflow-x: hidden; /* Evita scroll horizontal por error */
+  overflow-x: hidden;
 }
 
-/* 2. ESTRUCTURA GLOBAL */
 .container {
+  padding: 120px 80px 40px 80px;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 80px; /* Quitamos el padding-top de 120px */
 }
 
 .grid {
-  margin-top: 50px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 25px;
 }
 
-/* 3. COMPONENTES REUTILIZABLES (Estilo exacto de tu main.css) */
+/* Estilo de Card que se usa en todos lados */
 .card {
   background: rgba(255, 255, 255, .05);
   border: 1px solid rgba(0, 255, 213, .3);
@@ -45,13 +39,6 @@ body {
   transform: translateY(-5px);
 }
 
-.card h2 {
-  color: #00ffd5;
-  margin-bottom: 15px;
-  font-size: 1.5rem;
-}
-
-/* Capa para las partículas */
 .fondo-particulas {
   position: fixed;
   top: 0;
@@ -59,5 +46,11 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  pointer-events: none;
+}
+
+.secciones-container {
+  display: flex;
+  flex-direction: column;
+  gap: 100px; /* Separación elegante entre Skills, Education y Projects */
+  margin-bottom: 100px;
 }
