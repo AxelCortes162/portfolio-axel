@@ -11,6 +11,14 @@
   letter-spacing: 2px;
 }
 
+.education-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 213, 0.4)); /* Brillo sutil */
+}
+
 .timeline {
   position: relative;
   max-width: 800px;
@@ -91,10 +99,50 @@
   font-weight: bold;
 }
 
-/* Responsivo para móviles */
+/* --- AJUSTE DE LÍNEA DE TIEMPO PARA MÓVIL --- */
 @media (max-width: 768px) {
-  .timeline::after { left: 31px; }
-  .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; text-align: left; }
-  .timeline-item::after { left: 22px; }
-  .right { left: 0%; }
+  .education-section {
+    padding: 60px 20px;
+  }
+
+  /* Movemos la línea principal a la izquierda */
+  .timeline::after {
+    left: 20px; 
+    margin-left: 0;
+  }
+
+  .timeline-item {
+    width: 100%; /* Ocupa todo el ancho */
+    padding-left: 50px; /* Espacio para que el texto no tape la línea */
+    padding-right: 10px;
+    text-align: left !important; /* Forzamos texto a la izquierda siempre */
+    margin-bottom: 30px;
+  }
+
+  /* Movemos los círculos de la línea a la izquierda */
+  .timeline-item::after {
+    left: 12px !important;
+    right: auto !important;
+    top: 20px;
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Quitamos el desplazamiento de la clase 'right' */
+  .right {
+    left: 0%;
+  }
+
+  .timeline-content {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .timeline-content h3 {
+    font-size: 16px;
+  }
+
+  .timeline-content h4 {
+    font-size: 13px;
+  }
 }

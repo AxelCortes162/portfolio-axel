@@ -49,3 +49,74 @@
   color: #00ffd5;
   text-shadow: 0 0 8px #00ffd5;
 }
+
+/* --- ESTILOS PARA MÓVIL --- */
+
+/* Botón Hamburguesa (oculto en PC) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 30px;
+  height: 3px;
+  background: #00ffd5;
+  margin: 6px 0;
+  transition: 0.4s;
+  border-radius: 2px;
+}
+
+/* Media Query para Celular */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 20px; /* Reducimos el padding lateral en móvil */
+  }
+
+  .nav-toggle {
+    display: block; /* Aparece en móvil */
+  }
+
+  .menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Escondido a la derecha */
+    width: 70%;
+    height: 100vh;
+    background: rgba(10, 15, 26, 0.98);
+    backdrop-filter: blur(15px);
+    flex-direction: column; /* Enlaces uno debajo del otro */
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    transition: 0.5s ease-in-out;
+    border-left: 1px solid rgba(0, 255, 213, 0.2);
+  }
+
+  /* Clase para mostrar el menú */
+  .menu.open {
+    right: 0;
+  }
+
+  .menu li a {
+    font-size: 20px; /* Letra más grande para tocar con el dedo */
+  }
+
+  /* Animación de la hamburguesa a X */
+  .nav-toggle.open span:nth-child(1) {
+    transform: rotate(-45deg) translate(-6px, 7px);
+  }
+  .nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle.open span:nth-child(3) {
+    transform: rotate(45deg) translate(-6px, -7px);
+  }
+  .logo-img {
+    height: 50px; /* Logo un poco más pequeño en móvil */
+  }
+}

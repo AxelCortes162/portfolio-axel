@@ -8,6 +8,7 @@ import Education from "./sections/Education";
 import Projects from "./sections/Projects";
 import ContactPage from "./pages/ContactPage";
 import { personalInfo } from "./data/info";
+import Footer from "./components/Footer";
 import "./index.css";
 import "../src/styles/global.css";
 
@@ -33,12 +34,17 @@ function App() {
                 </div>
               </div>
             </main>
-            
+            <Footer />
           </>
         } />
 
         {/* RUTA DE CONTACTO */}
-        <Route path="/contacto" element={<ContactPage />} />
+        <Route path="/contacto" element={
+          <>
+            <ContactPage />
+            <Footer />
+          </>
+          } />
       </Routes>
     </Router>
   );
