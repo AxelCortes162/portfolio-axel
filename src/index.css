@@ -17,6 +17,10 @@ body {
   overflow-x: hidden; /* Evita scroll horizontal por error */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* 2. ESTRUCTURA GLOBAL */
 .container {
   max-width: 1400px;

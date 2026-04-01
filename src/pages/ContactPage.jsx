@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { FaWhatsapp, FaPaperPlane, FaPhoneAlt, FaEnvelope, FaUser } from "react-icons/fa"; // Importamos iconos
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer"; // No olvides el footer
 import "../styles/ContactPage.css";
 
 function ContactPage() {
@@ -17,7 +19,7 @@ function ContactPage() {
     const telefono = data.get("phone").trim();
     const mensaje = data.get("message").trim();
 
-    // 1. Validaciones de Coherencia
+    // 1. Validaciones
     if (!nombre || !email || !telefono || !mensaje) {
       Swal.fire({
         title: "Faltan datos",
@@ -37,7 +39,8 @@ function ContactPage() {
         text: "La estructura del correo no es correcta.",
         icon: "error",
         background: "#0f172a",
-        color: "#fff"
+        color: "#fff",
+        confirmButtonColor: "#00ffd5"
       });
       return;
     }
@@ -49,12 +52,13 @@ function ContactPage() {
         text: "Deben ser exactamente 10 números.",
         icon: "error",
         background: "#0f172a",
-        color: "#fff"
+        color: "#fff",
+        confirmButtonColor: "#00ffd5"
       });
       return;
     }
 
-    // 2. Proceso de Envío con Spinner
+    // 2. Envío
     setEnviando(true);
     
     try {
@@ -83,7 +87,8 @@ function ContactPage() {
         text: "No se pudo enviar. Intenta por WhatsApp.",
         icon: "error",
         background: "#0f172a",
-        color: "#fff"
+        color: "#fff",
+        confirmButtonColor: "#00ffd5"
       });
     } finally {
       setEnviando(false);
@@ -93,22 +98,24 @@ function ContactPage() {
   return (
     <>
       <Navbar />
-      <div className="container page-center">
+      <main className="page-center">
         <div className="contacto-full">
-          <Card title="Contacto Directo">
+          {/* Usamos tu componente Card pero con estilo inmersivo */}
+          <Card title="¡Hablemos de tu próximo proyecto!">
             <form className="formulario" onSubmit={handleSubmit}>
+              
               <div className="campo">
-                <label>Nombre Completo</label>
-                <input type="text" name="name" placeholder="Tu nombre" />
+                <label><FaUser /> Nombre Completo</label>
+                <input type="text" name="name" placeholder="Ej. Axel Cortes" />
               </div>
               
               <div className="campo">
-                <label>Email</label>
+                <label><FaEnvelope /> Email</label>
                 <input type="email" name="email" placeholder="correo@ejemplo.com" />
               </div>
 
               <div className="campo">
-                <label>Número de Celular (10 dígitos)</label>
+                <label><FaPhoneAlt /> Celular (10 dígitos)</label>
                 <input 
                   type="text" 
                   name="phone" 
@@ -122,31 +129,35 @@ function ContactPage() {
               
               <div className="campo">
                 <label>Mensaje</label>
-                <textarea name="message" placeholder="¿Cómo puedo ayudarte?"></textarea>
+                <textarea name="message" rows="4" placeholder="¿En qué puedo ayudarte?"></textarea>
               </div>
               
               <button type="submit" className="btn-enviar" disabled={enviando}>
                 {enviando ? (
                   <span className="spinner-loader"></span>
                 ) : (
-                  "Enviar Mensaje"
+                  <><FaPaperPlane /> ENVIAR MENSAJE</>
                 )}
               </button>
             </form>
 
+            <div className="whatsapp-divider">
+               <span>O TAMBIÉN</span>
+            </div>
+
             <div className="whatsapp-section">
-              <p>O si prefieres algo instantáneo:</p>
               <a 
-                href="https://wa.me/525586694753?text=¡Hola!%20Estoy%20interesado%20en%20un%20proyecto." 
+                href="https://wa.me/525586694753?text=¡Hola!%20Estoy%20interesado%20en%20tu%20trabajo%20como%20desarrollador." 
                 target="_blank" 
+                rel="noreferrer"
                 className="btn-whatsapp"
               >
-                WhatsApp Directo
+                <FaWhatsapp /> CONTACTO POR WHATSAPP
               </a>
             </div>
           </Card>
         </div>
-      </div>
+      </main>
     </>
   );
 }

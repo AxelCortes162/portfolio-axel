@@ -135,16 +135,43 @@
   100% { opacity: 0; transform: rotate(45deg) translate(10px, 10px); }
 }
 
-/* --- RESPONSIVO CELULAR --- */
+/* --- AJUSTES ESPECÍFICOS PARA MÓVIL --- */
 @media (max-width: 768px) {
-  .hero-container {
-    flex-direction: column;
-    text-align: center;
-    gap: 30px;
+  .hero-fullscreen {
+    padding: 0 20px; /* Menos espacio a los lados para aprovechar el ancho */
+    justify-content: center; /* Centrado vertical total */
   }
-  
+
+  .hero-container {
+    flex-direction: column; /* Foto arriba, texto abajo */
+    gap: 25px; /* Espacio moderado entre elementos */
+    text-align: center; /* Todo el texto al centro */
+  }
+
   .hero-img {
-    width: 180px;
-    height: 180px;
+    width: 160px; /* Tamaño ideal para que no tape todo el texto */
+    height: 160px;
+    border-width: 3px; /* Un poco más delgado el borde para balancear */
+  }
+
+  .hero-text h1 {
+    font-size: 38px; /* Tamaño grande pero que no se corte */
+    line-height: 1.1;
+  }
+
+  .hero-text h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .hero-bio {
+    font-size: 14px; /* Un poco más pequeña para que quepa bien */
+    padding: 0 10px; /* Margen interno para que no toque los bordes */
+  }
+
+  /* Ajuste de la flecha indicadora */
+  .scroll-indicator {
+    bottom: 20px;
+    transform: scale(0.8); /* La hacemos un poquito más pequeña */
   }
 }

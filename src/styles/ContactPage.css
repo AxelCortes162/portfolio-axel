@@ -25,10 +25,12 @@
 }
 
 .campo label {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre icono y texto */
   color: #00ffd5;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .campo input, .campo textarea {
@@ -108,4 +110,73 @@
 .btn-whatsapp:hover {
   box-shadow: 0 0 15px #25d366;
   transform: scale(1.02);
+}
+
+.whatsapp-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 25px 0;
+  color: #64748b;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.whatsapp-divider::before, .whatsapp-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.whatsapp-divider:not(:empty)::before { margin-right: .5em; }
+.whatsapp-divider:not(:empty)::after { margin-left: .5em; }
+
+/* --- AJUSTES PARA MÓVIL --- */
+@media (max-width: 768px) {
+  .page-center {
+    padding: 100px 20px 40px 20px; /* Espacio para el Navbar fijo */
+    align-items: flex-start; /* Empieza desde arriba para que el teclado no tape todo */
+  }
+
+  .contacto-full {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contacto-full h2 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  /* Inputs más grandes para que el dedo no falle */
+  .campo input, .campo textarea {
+    padding: 15px;
+    font-size: 16px; /* Evita que iOS haga zoom automático al enfocar */
+    background: rgba(255, 255, 255, 0.08); /* Un poco más claro para legibilidad */
+  }
+
+  .btn-enviar {
+    width: 100%;
+    padding: 18px;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+
+  /* Sección de WhatsApp en móvil */
+  .whatsapp-section {
+    margin-top: 40px;
+    padding: 25px;
+    background: rgba(37, 211, 102, 0.05); /* Un toque verde muy sutil */
+    border-radius: 15px;
+    border: 1px solid rgba(37, 211, 102, 0.2);
+  }
+
+  .btn-whatsapp {
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
 }
