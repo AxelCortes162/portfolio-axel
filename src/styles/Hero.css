@@ -138,7 +138,7 @@
 /* --- AJUSTES ESPECÍFICOS PARA MÓVIL --- */
 @media (max-width: 768px) {
   .hero-fullscreen {
-    height: 97vh;
+    height: 95vh;
     padding: 0 20px; /* Menos espacio a los lados para aprovechar el ancho */
     justify-content: center; /* Centrado vertical total */
   }
