@@ -1,17 +1,20 @@
-/* Centrado de la página */
+/* Contenedor principal de la página */
 .page-center {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 120px);
+  align-items: flex-start; /* Cambiado de center a flex-start para que empiece arriba */
+  min-height: 100vh;
+  padding-top: 120px; /* Espacio suficiente para el Navbar en escritorio */
+  padding-bottom: 40px;
 }
 
 .contacto-full {
   max-width: 600px;
-  width: 100%;
+  width: 90%; /* Ajuste para que no toque bordes en tablets */
+  margin: 0 auto;
 }
 
-/* Formulario Estricto */
+/* Ajuste del formulario */
 .formulario {
   display: flex;
   flex-direction: column;
@@ -151,19 +154,20 @@
 /* --- AJUSTES PARA MÓVIL --- */
 @media (max-width: 768px) {
   .page-center {
-    padding: 100px 20px 40px 20px; /* Espacio para el Navbar fijo */
-    align-items: flex-start; /* Empieza desde arriba para que el teclado no tape todo */
-  }
-
-  .contacto-full {
-    width: 100%;
-    max-width: 100%;
+    padding-top: 100px; /* Un poco menos de espacio en móvil */
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .contacto-full h2 {
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 30px;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  /* Evitar que el botón de WhatsApp sea demasiado gigante */
+  .btn-whatsapp {
+    font-size: 14px;
+    padding: 12px;
   }
 
   /* Inputs más grandes para que el dedo no falle */

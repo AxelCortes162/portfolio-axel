@@ -1,4 +1,3 @@
-// src/sections/Projects.jsx
 import React, { useState } from 'react';
 import Card from '../components/Card';
 import ProjectModal from '../components/ProjectModal';
@@ -6,18 +5,16 @@ import { projectsData } from '../assets/projects/projectsData';
 import "../styles/Projects.css";
 
 function Projects() {
-  const [activeTab, setActiveTab] = useState('games'); // Pestaña activa por defecto
+  const [activeTab, setActiveTab] = useState('games');
   const [selectedProject, setSelectedProject] = useState(null);
 
-  // Filtra los proyectos según la pestaña seleccionada
   const filteredProjects = projectsData.filter(project => project.category === activeTab);
 
-  // Reinicia el video desde el inicio al hacer hover
   const handleMouseEnter = (e) => {
     const video = e.currentTarget.querySelector('video');
     if (video) {
       video.currentTime = 0;
-      video.play();
+      video.play().catch(error => console.log("Auto-play prevented"));
     }
   };
 
@@ -33,7 +30,6 @@ function Projects() {
     <section id="projects" className="projects-section container">
       <h2>Mis <span>Proyectos</span></h2>
       
-      {/* SECCIÓN RESTAURADA: Pestañas de Navegación */}
       <div className="projects-tabs">
         <button 
           className={activeTab === 'games' ? 'active' : ''} 
@@ -45,41 +41,41 @@ function Projects() {
           className={activeTab === 'web' ? 'active' : ''} 
           onClick={() => setActiveTab('web')}
         >
-          <i className='bx bx-code-block'></i> Web Development
+          <i className='bx bx-code-alt'></i> Web Development
         </button>
       </div>
 
       <div className="projects-grid">
-        {filteredProjects.map(project => (
+        {filteredProjects.map((project) => (
           <div 
             key={project.id} 
             className="project-item" 
             data-format={project.format}
-            onClick={() => handleProjectClick(project)}
             onMouseEnter={handleMouseEnter}
+            onClick={() => handleProjectClick(project)}
           >
             <Card>
-              <div className="project-card-content">
-                <div className="project-image-wrapper">
-                  <img src={project.image} alt={project.title} className="project-img" />
-                  
-                  {project.videoPreview && (
-                    <video 
-                      src={project.videoPreview} 
-                      className="project-video" 
-                      loop 
-                      muted 
-                      playsInline
-                    />
-                  )}
-                  
-                  {project.type === 'vr' && <div className="vr-badge">VR Experience</div>}
-                </div>
+              <div className="project-media-container">
+                <img src={project.image} alt={project.title} className="project-img" />
                 
+                {project.videoPreview && (
+                  <video 
+                    src={project.videoPreview} 
+                    className="project-video" 
+                    loop 
+                    muted 
+                    autoPlay
+                    playsInline
+                  />
+                )}
+                
+                {project.type === 'vr' && <div className="vr-badge">VR Experience</div>}
+              </div>
+              
+              <div className="project-card-content">
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
                 
-                {/* SECCIÓN RESTAURADA: Tecnologías (Tags) */}
                 <div className="project-tags">
                   {project.tags.map(tag => (
                     <span key={tag} className="tag">{tag}</span>
