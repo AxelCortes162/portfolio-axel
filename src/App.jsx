@@ -10,7 +10,6 @@ import ContactPage from "./pages/ContactPage";
 import { personalInfo } from "./data/info";
 import Footer from "./components/Footer";
 import 'boxicons/css/boxicons.min.css';
-import "./index.css";
 import "../src/styles/global.css";
 
 function App() {

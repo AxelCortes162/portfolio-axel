@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Navbar.css";
 import logo from "../assets/logo.png";
 
@@ -9,27 +9,24 @@ function Navbar() {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Función para subir al inicio suavemente
   const scrollToTop = () => {
-    setIsOpen(false); // Cerramos el menú móvil si está abierto
+    setIsOpen(false);
     window.scrollTo({
       top: 0,
-      behavior: "smooth" // Efecto de deslizamiento suave
+      behavior: "smooth"
     });
   };
 
-  // Función especial para el inicio si estás en otra página (como contacto)
   const handleHomeClick = (e) => {
     e.preventDefault();
-    navigate("/"); // Nos movemos a la home
+    navigate("/");
     setTimeout(() => {
-      scrollToTop(); // Una vez ahí, subimos
+      scrollToTop();
     }, 100);
   };
 
   return (
     <nav className="navbar">
-      {/* Al hacer clic en el Logo, sube al inicio */}
       <Link to="/" onClick={scrollToTop}>
         <img src={logo} alt="Logo Axel" className="logo-img" />
       </Link>
@@ -45,7 +42,6 @@ function Navbar() {
 
       <ul className={`menu ${isOpen ? "open" : ""}`}>
         <li>
-          {/* Usamos handleHomeClick para asegurar que funcione desde cualquier ruta */}
           <Link to="/" onClick={handleHomeClick}>Inicio</Link>
         </li>
         <li>
@@ -53,6 +49,9 @@ function Navbar() {
         </li>
         <li>
           <a href="#education" onClick={toggleMenu}>Formación</a>
+        </li>
+        <li>
+          <a href="#projects" onClick={toggleMenu}>Proyectos</a>
         </li>
         <li>
           <Link to="/contacto" onClick={() => setIsOpen(false)}>Contacto</Link>
