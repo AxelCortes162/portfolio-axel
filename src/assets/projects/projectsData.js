@@ -3,6 +3,9 @@ import imagen100Pies from "../100pies-preview.webp";
 import videoGoldStar from "../videos/goldstar-preview.mp4";
 import imagenGoldStar from "../goldstar-preview.webp";
 import imagenCorazonVR from "../corazon-delator.webp";
+import imagenLeyendasVR from "../casa-lagrimas.jpg";
+import lorelyfotos from "../loryfotos.png";
+import aluraFlix from "../aluraflix.png";
 
 // src/assets/projects/projectsData.js
 export const projectsData = [
@@ -28,7 +31,7 @@ export const projectsData = [
     videoPreview: videoGoldStar, 
     image: imagenGoldStar,
     type: "link",
-    link: "https://play.google.com/store/apps/details?id=com.tuempresa.goldstart"
+    link: "https://play.google.com/store/apps/details?id=com.MRTSTUDIO.Balls&hl=es_MX"
   },
   {
     id: 3,
@@ -50,9 +53,9 @@ export const projectsData = [
     title: "Leyendas Mexicanas VR",
     category: "games",
     description: "Recorrido narrativo inmersivo ('El Vampiro de Guadalajara' y 'La Casa de las Lágrimas') con locomoción física.",
-    tags: ["VR", "Unity", "Meta SDK", "Locomotion", "Narrativa Visual"],
+    tags: ["VR", "Unity", "Meta SDK", "Locomotion"],
     format: "horizontal",
-    image: "https://via.placeholder.com/400x250?text=Leyendas+VR",
+    image: imagenLeyendasVR,
     type: "vr",
     details: {
       mechanics: "Caminata física real para avanzar en el entorno virtual. Uso de audio 3D.",
@@ -67,8 +70,19 @@ export const projectsData = [
     description: "Portafolio para fotógrafa deportiva con panel de administración para gestión de contenido.",
     tags: ["React", "Firebase", "CRUD", "Autenticación", "Vercel"],
     format: "horizontal",
-    image: "https://via.placeholder.com/400x250?text=Lorely+Fotos",
+    image: lorelyfotos,
     type: "link",
     link: "https://lorelyfotos.vercel.app/"
-  }
+  },
+  {
+  id: 6,
+  title: "Alura Flix",
+  category: "web",
+  description: "Plataforma estilo Netflix para organizar videos por categorías. Permite agregar, editar y eliminar contenido mediante un formulario interactivo.",
+  tags: ["React", "Styled Components", "API Rest", "JavaScript"],
+  format: "horizontal", 
+  image: aluraFlix, // Aquí va tu captura de pantalla
+  type: "link",
+  link: "https://alura-flix-self.vercel.app/" // Tu enlace de Vercel
+},
 ];

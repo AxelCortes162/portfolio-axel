@@ -3,7 +3,7 @@
   padding: 25px 0; /* Menos alto */
   background: rgba(2, 6, 23, 0.95); /* Más oscuro para que se funda con el fondo */
   border-top: 1px solid rgba(0, 255, 213, 0.05); /* Línea casi invisible */
-  margin-top: 60px;
+  
 }
 
 .footer-content {
