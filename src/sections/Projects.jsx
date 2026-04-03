@@ -7,17 +7,25 @@ import "../styles/Projects.css";
 
 function Projects() {
   const [activeTab, setActiveTab] = useState('games'); // Pestaña activa por defecto
-  const [selectedProject, setSelectedProject] = useState(null); // Estado para el Modal
+  const [selectedProject, setSelectedProject] = useState(null);
 
-  // Filtrar proyectos por categoría
+  // Filtra los proyectos según la pestaña seleccionada
   const filteredProjects = projectsData.filter(project => project.category === activeTab);
 
-  // Función para manejar el clic en la tarjeta
+  // Reinicia el video desde el inicio al hacer hover
+  const handleMouseEnter = (e) => {
+    const video = e.currentTarget.querySelector('video');
+    if (video) {
+      video.currentTime = 0;
+      video.play();
+    }
+  };
+
   const handleProjectClick = (project) => {
     if (project.type === 'vr') {
-      setSelectedProject(project); // Abre el Modal
+      setSelectedProject(project);
     } else {
-      window.open(project.link, '_blank'); // Abre el link directo
+      window.open(project.link, '_blank');
     }
   };
 
@@ -25,7 +33,7 @@ function Projects() {
     <section id="projects" className="projects-section container">
       <h2>Mis <span>Proyectos</span></h2>
       
-      {/* Pestañas de Navegación */}
+      {/* SECCIÓN RESTAURADA: Pestañas de Navegación */}
       <div className="projects-tabs">
         <button 
           className={activeTab === 'games' ? 'active' : ''} 
@@ -41,20 +49,37 @@ function Projects() {
         </button>
       </div>
 
-      {/* Grid de Proyectos */}
       <div className="projects-grid">
         {filteredProjects.map(project => (
-          <div key={project.id} className="project-item" onClick={() => handleProjectClick(project)}>
+          <div 
+            key={project.id} 
+            className="project-item" 
+            data-format={project.format}
+            onClick={() => handleProjectClick(project)}
+            onMouseEnter={handleMouseEnter}
+          >
             <Card>
               <div className="project-card-content">
                 <div className="project-image-wrapper">
                   <img src={project.image} alt={project.title} className="project-img" />
+                  
+                  {project.videoPreview && (
+                    <video 
+                      src={project.videoPreview} 
+                      className="project-video" 
+                      loop 
+                      muted 
+                      playsInline
+                    />
+                  )}
+                  
                   {project.type === 'vr' && <div className="vr-badge">VR Experience</div>}
                 </div>
                 
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
                 
+                {/* SECCIÓN RESTAURADA: Tecnologías (Tags) */}
                 <div className="project-tags">
                   {project.tags.map(tag => (
                     <span key={tag} className="tag">{tag}</span>
@@ -74,7 +99,6 @@ function Projects() {
         ))}
       </div>
 
-      {/* Ventana Emergente (Modal) */}
       <ProjectModal 
         project={selectedProject} 
         onClose={() => setSelectedProject(null)} 
