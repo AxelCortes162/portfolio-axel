@@ -17,7 +17,7 @@
   text-shadow: 0 0 15px rgba(0, 255, 213, 0.5);
 }
 
-/* Pestañas (Tabs) */
+/* --- Pestañas (Tabs) --- */
 .projects-tabs {
   display: flex;
   justify-content: center;
@@ -57,11 +57,12 @@
   box-shadow: 0 0 10px rgba(0, 255, 213, 0.1);
 }
 
-/* Grid de Proyectos */
+/* --- Grid de Proyectos --- */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
+  align-items: start; /* Evita que las tarjetas se estiren de forma desigual */
 }
 
 .project-item {
@@ -80,18 +81,79 @@
   text-align: left;
 }
 
+/* --- Contenedor de Imagen/Video --- */
 .project-image-wrapper {
   position: relative;
-  border-radius: 15px;
+  width: 100%;
+  background: #020617;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
   margin-bottom: 20px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.project-img {
+/* FORMATO VERTICAL (Móvil / 100 Pies) */
+.project-item[data-format="vertical"] .project-image-wrapper {
+  height: 480px;
+  background: #020617; /* Color muy oscuro para que se funda con el video */
+  display: flex;
+  justify-content: center; /* Centra el contenido flex (la imagen) */
+  align-items: center;
+  position: relative;
+  border: 1px solid rgba(0, 255, 213, 0.1); /* Un pequeño borde neón ayuda a definir el límite */
+}
+
+.project-item[data-format="vertical"] .project-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  margin: 0 auto; /* Centrado clásico para imágenes */
+  display: block;
+}
+
+.project-item[data-format="vertical"] .project-video {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  left: 50%; /* Lo mueve al centro */
+  transform: translateX(-50%); /* Lo compensa para que el centro del video sea el centro del div */
+  transition: opacity 0.4s ease; /* Quitamos el transform de la transición para que no se mueva al hacer hover */
+}
+
+/* FORMATO HORIZONTAL (Web / VR) */
+.project-item[data-format="horizontal"] .project-image-wrapper,
+.project-item:not([data-format]) .project-image-wrapper {
+  height: 220px;
+}
+
+.project-item[data-format="horizontal"] .project-img,
+.project-item[data-format="horizontal"] .project-video,
+.project-item:not([data-format]) .project-img {
+  height: 100%;
   width: 100%;
-  height: 200px;
   object-fit: cover;
+}
+
+/* --- Lógica del Video (Hover) --- */
+.project-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* Esto evita que el video se desplace a la izquierda cuando haces hover */
+.project-item:hover .project-video {
+  opacity: 1;
+  transform: translateX(-50%) scale(1.02); /* Mantiene el centro y da un pequeño zoom */
+}
+
+.project-img {
   transition: transform 0.5s ease;
 }
 
@@ -99,6 +161,7 @@
   transform: scale(1.05);
 }
 
+/* --- Badges e Indicadores --- */
 .vr-badge {
   position: absolute;
   top: 10px;
@@ -111,6 +174,7 @@
   border-radius: 20px;
   backdrop-filter: blur(5px);
   border: 1px solid rgba(0, 255, 213, 0.3);
+  z-index: 2;
 }
 
 .project-card-content h3 {
@@ -124,9 +188,10 @@
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 20px;
-  flex-grow: 1; /* Empuja los tags hacia abajo */
+  flex-grow: 1;
 }
 
+/* --- Tags --- */
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -166,18 +231,20 @@
   }
 
   .projects-tabs {
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 10px;
   }
 
   .projects-tabs button {
-    font-size: 14px;
-    padding: 8px 15px;
-    width: 100%; /* Pestañas apiladas en móvil */
+    width: 100%;
     justify-content: center;
   }
 
   .projects-grid {
-    grid-template-columns: 1fr; /* Una columna en móvil */
+    grid-template-columns: 1fr;
+  }
+
+  .project-item[data-format="vertical"] .project-image-wrapper {
+    height: 400px; /* Un poco más pequeño en móviles reales */
   }
 }
