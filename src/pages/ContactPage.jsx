@@ -39,7 +39,7 @@ function ContactPage() {
     setEnviando(true);
 
     try {
-      const response = await fetch("https://formspree.io/f/xvgzlowq", {
+      const response = await fetch("https://formspree.io/f/xbdpkdzq", {
         method: "POST",
         body: data,
         headers: {
@@ -151,7 +151,7 @@ function ContactPage() {
                 rel="noreferrer"
                 className="btn-whatsapp"
               >
-                <i className='bx bxl-whatsapp'></i> CONTACTO POR WHATSAPP
+                <i className='bx bxl-whatsapp'></i>  WHATSAPP
               </a>
             </div>
           </Card>
