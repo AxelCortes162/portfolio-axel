@@ -3,17 +3,29 @@ import React from 'react';
 import "../styles/ProjectModal.css";
 
 function ProjectModal({ project, onClose }) {
-  if (!project) return null; // No renderizar si no hay proyecto seleccionado
+  if (!project) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* Botón de cerrar */}
         <button className="modal-close" onClick={onClose}>
           <i className='bx bx-x'></i>
         </button>
 
         <div className="modal-body">
+          {/* SECCIÓN DE VIDEO (Solo si tiene videoPreview) */}
+          {project.videoPreview && (
+            <div className="modal-video-container">
+              <video 
+                src={project.videoPreview} 
+                controls 
+                autoPlay 
+                loop 
+                className={project.format === 'vertical' ? 'modal-video-vertical' : 'modal-video-horizontal'}
+              />
+            </div>
+          )}
+
           <div className="modal-header-info">
             <h2>{project.title}</h2>
             <div className="modal-tags">
@@ -29,20 +41,17 @@ function ProjectModal({ project, onClose }) {
               <p>{project.details.mechanics}</p>
             </div>
             <div className="detail-item">
-              <h4>Notas de Desarrollo / Retos</h4>
+              <h4>Retos de Desarrollo</h4>
               <p>{project.details.devLog}</p>
             </div>
           </div>
 
-          {/* Galería de imágenes extra del desarrollo (si existen) */}
-          {project.details.extraImages.length > 0 && (
-            <div className="modal-gallery">
-              <h4>Galería de Desarrollo</h4>
-              <div className="gallery-grid">
-                {project.details.extraImages.map((img, index) => (
-                  <img key={index} src={img} alt={`Desarrollo ${index + 1}`} />
-                ))}
-              </div>
+          {/* BOTÓN DE ACCIÓN (Si tiene link a tienda/web) */}
+          {project.link && (
+            <div className="modal-footer-action">
+              <a href={project.link} target="_blank" rel="noreferrer" className="btn-store">
+                <i className='bx bxl-play-store'></i> Ver en Play Store
+              </a>
             </div>
           )}
         </div>

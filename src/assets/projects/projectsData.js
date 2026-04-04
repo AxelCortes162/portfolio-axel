@@ -21,8 +21,13 @@ export const projectsData = [
     format: "vertical", 
     videoPreview: video100Pies, 
     image: imagen100Pies,
-    type: "link",
-    link: "https://play.google.com/store/apps/details?id=com.myrockstartwin.cienpies100&hl=es_MX"
+    type: "games", // 👈 Cambiado de "link" a "games"
+    link: "https://play.google.com/store/apps/details?id=com.myrockstartwin.cienpies100&hl=es_MX",
+    details: { // 👈 Añadimos detalles para el modal
+      mechanics: "Control 'One-Tap' responsivo, generación procedimental de obstáculos y sistema de físicas ajustado para baja latencia.",
+      devLog: "Reto principal: Implementar animaciones fluidas para un personaje con discapacidad física y optimización para dispositivos de gama baja.",
+      extraImages: [] 
+    }
   },
   {
     id: 2,
@@ -33,8 +38,13 @@ export const projectsData = [
     format: "vertical",
     videoPreview: videoGoldStar,
     image: imagenGoldStar,
-    type: "link",
-    link: "https://play.google.com/store/apps/details?id=com.myrockstartwin.GoldStart100&hl=es_MX"
+    type: "games", // 👈 Cambiado
+    link: "https://play.google.com/store/apps/details?id=com.myrockstartwin.GoldStart100&hl=es_MX",
+    details: { // 👈 Añadimos detalles
+      mechanics: "Lógica de combinación de objetos (merge), gestión de límites del campo y físicas de rebote realistas.",
+      devLog: "Se trabajó intensamente en la jerarquía de colisiones para evitar que los balones se 'traspasaran' al encimarse.",
+      extraImages: []
+    }
   },
   {
     id: 3,

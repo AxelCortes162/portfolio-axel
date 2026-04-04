@@ -19,9 +19,11 @@ function Projects() {
   };
 
   const handleProjectClick = (project) => {
-    if (project.type === 'vr') {
+    // Ahora, tanto 'vr' como los de categoría 'games' abren el modal
+    if (project.type === 'vr' || project.category === 'games') {
       setSelectedProject(project);
     } else {
+      // Los de categoría 'web' siguen abriendo el link directo
       window.open(project.link, '_blank');
     }
   };
@@ -55,24 +57,23 @@ function Projects() {
             onClick={() => handleProjectClick(project)}
           >
             <Card>
-              <div className="project-media-container">
-                <img src={project.image} alt={project.title} className="project-img" />
-                
-                {project.videoPreview && (
-                  <video 
-                    src={project.videoPreview} 
-                    className="project-video" 
-                    loop 
-                    muted 
-                    autoPlay
-                    playsInline
-                  />
-                )}
-                
-                {project.type === 'vr' && <div className="vr-badge">VR Experience</div>}
-              </div>
-              
               <div className="project-card-content">
+                <div className="project-image-wrapper">
+                  <img src={project.image} alt={project.title} className="project-img" />
+                  
+                  {project.videoPreview && (
+                    <video 
+                      src={project.videoPreview} 
+                      className="project-video" 
+                      loop 
+                      muted 
+                      playsInline
+                    />
+                  )}
+                  
+                  {project.type === 'vr' && <div className="vr-badge">VR Experience</div>}
+                </div>
+                
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
                 
@@ -83,7 +84,7 @@ function Projects() {
                 </div>
 
                 <div className="project-action-indicator">
-                  {project.type === 'vr' ? (
+                  {project.type === 'vr' || project.category === 'games' ? (
                     <><i className='bx bx-plus-circle'></i> Ver Detalles</>
                   ) : (
                     <><i className='bx bx-link-external'></i> Ver Proyecto</>
