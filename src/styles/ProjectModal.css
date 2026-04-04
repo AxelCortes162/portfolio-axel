@@ -1,12 +1,14 @@
-/* --- VENTANA EMERGENTE (MODAL) --- */
+/* ============================================================
+   --- VENTANA EMERGENTE (MODAL) ---
+   ============================================================ */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(2, 6, 23, 0.9); /* Fondo oscuro profundo */
-  backdrop-filter: blur(10px);
+  background: rgba(2, 6, 23, 0.95); /* Fondo más oscuro para resaltar el contenido */
+  backdrop-filter: blur(12px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,136 +19,208 @@
 }
 
 .modal-content {
-  background: #0f172a; /* Color pizarra profundo */
-  border-radius: 20px;
+  background: #0f172a;
+  border-radius: 24px;
   width: 100%;
-  max-width: 700px;
+  max-width: 800px; /* Un poco más ancho para apreciar mejor los videos */
   max-height: 90vh;
   overflow-y: auto;
   border: 1px solid rgba(0, 255, 213, 0.2);
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 213, 0.1);
-  transform: translateY(20px);
-  animation: slideUp 0.3s 0.1s forwards;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 213, 0.1);
+  transform: translateY(30px);
+  animation: slideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 213, 0.3) transparent;
 }
 
-/* Botón cerrar */
+/* --- SECCIÓN DE VIDEO --- */
+.modal-video-container {
+  width: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+/* Video Vertical (Gameplay Móvil como 100 Pies) */
+.modal-video-vertical {
+  height: 550px; 
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Video Horizontal (VR / Web) */
+.modal-video-horizontal {
+  width: 100%;
+  height: auto;
+  max-height: 450px;
+  object-fit: cover;
+}
+
+/* --- CUERPO DEL MODAL --- */
+.modal-body {
+  padding: 30px 40px 40px;
+  text-align: left;
+}
+
 .modal-close {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  top: 20px;
+  right: 20px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
-  padding: 5px;
-  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
+  justify-content: center;
   align-items: center;
+  z-index: 10;
   transition: all 0.3s ease;
 }
 
 .modal-close:hover {
-  background: #ff4757; /* Rojo para cerrar */
+  background: #ff4757;
   border-color: #ff4757;
   transform: rotate(90deg);
 }
 
-.modal-body {
-  padding: 40px;
-  text-align: left;
-}
-
 .modal-header-info {
+  /* 🔥 AÑADIDO: Margen superior para separar del video */
+  margin-top: 25px; 
   margin-bottom: 25px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 15px;
 }
 
 .modal-header-info h2 {
   color: #00ffd5;
-  font-size: 28px;
-  margin-bottom: 10px;
-  text-shadow: 0 0 10px rgba(0, 255, 213, 0.3);
+  font-size: 32px;
+  margin-bottom: 12px; 
+  text-shadow: 0 0 15px rgba(0, 255, 213, 0.3);
 }
 
 .modal-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
+}
+
+.tag {
+  background: rgba(0, 255, 213, 0.1);
+  color: #00ffd5;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid rgba(0, 255, 213, 0.2);
 }
 
 .modal-description {
-  color: #e2e8f0;
-  font-size: 16px;
-  line-height: 1.7;
-  margin-bottom: 30px;
+  color: #cbd5e1;
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 35px;
 }
 
+/* --- GRID DE DETALLES --- */
 .modal-details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  margin-bottom: 35px;
+  gap: 30px;
+  margin-bottom: 40px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .detail-item h4 {
   color: #fff;
   font-size: 16px;
-  margin-bottom: 10px;
-  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-item h4::before {
+  content: "";
+  width: 4px;
+  height: 16px;
+  background: #00ffd5;
+  border-radius: 10px;
 }
 
 .detail-item p {
-  color: #aaa;
+  color: #94a3b8;
   font-size: 14px;
   line-height: 1.6;
 }
 
-/* Galería */
-.modal-gallery h4 {
-  color: #fff;
-  margin-bottom: 15px;
+/* --- BOTÓN DE ACCIÓN (STORE) --- */
+.modal-footer-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
+.btn-store {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #00ffd5;
+  color: #020617;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  font-size: 15px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
-.gallery-grid img {
-  width: 100%;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.3s ease;
+.btn-store:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 255, 213, 0.4);
 }
 
-.gallery-grid img:hover {
-  transform: scale(1.03);
-}
+/* --- ANIMACIONES --- */
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
 
-/* Animaciones */
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* Ajustes Móviles */
+/* ============================================================
+   --- AJUSTES MÓVILES ---
+   ============================================================ */
 @media (max-width: 768px) {
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-video-vertical {
+    height: 420px;
+  }
+
   .modal-body {
     padding: 25px;
   }
-  
+
   .modal-header-info h2 {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .modal-details-grid {
-    grid-template-columns: 1fr; /* Una columna en móvil */
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .btn-store {
+    width: 100%;
+    justify-content: center;
   }
 }
