@@ -10,6 +10,7 @@ import imagenCorazonVR from "../corazon-delator.webp";
 import imagenLeyendasVR from "../casa-lagrimas.jpg";
 import lorelyfotos from "../loryfotos.png";
 import aluraFlix from "../aluraflix.png";
+import botanasMony from "../botanas.png";
 
 export const projectsData = [
   {
@@ -99,5 +100,16 @@ export const projectsData = [
     image: aluraFlix,
     type: "link",
     link: "https://alura-flix-sepia.vercel.app/"
+  },
+  {
+    id: 7,
+    title: "Botanas Mony",
+    category: "web",
+    description: "Plataforma web interactiva y menú digital para negocio local de snacks, optimizada para la gestión de pedidos y envíos.",
+    tags: ["React", "Firebase", "CSS", "Vite", "Vercel"],
+    format: "vertical",
+    image: botanasMony, // 👈 Recuerda importar esta imagen arriba
+    type: "link",
+    link: "https://botanasmony.vercel.app/"
   }
 ];

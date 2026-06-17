@@ -8,7 +8,6 @@ function Skills() {
     { name: "CSS3", icon: "bx bxl-css3" },
     { name: "JavaScript", icon: "bx bxl-javascript" },
     { name: "React", icon: "bx bxl-react" },
-    { name: "Tailwind CSS", icon: "bx bxl-tailwind-css" },
     { name: "Vite", icon: "bx bxs-zap" } // Vite no tiene logo oficial en Boxicons, usamos un rayo pro
   ];
 
