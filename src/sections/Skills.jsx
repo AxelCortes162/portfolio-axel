@@ -8,13 +8,13 @@ function Skills() {
     { name: "CSS3", icon: "bx bxl-css3" },
     { name: "JavaScript", icon: "bx bxl-javascript" },
     { name: "React", icon: "bx bxl-react" },
-    { name: "Vite", icon: "bx bxs-zap" } // Vite no tiene logo oficial en Boxicons, usamos un rayo pro
+    { name: "Vite", icon: "bx bxs-zap" } 
   ];
 
   const gameSkills = [
     { name: "C#", icon: "bx bx-code-alt" },
     { name: "Unity", icon: "bx bxl-unity" },
-    { name: "VR Development", icon: "bx bx-vr" },
+    { name: "VR Development", icon: "bx bx-joystick" },
     { name: "Mobile Games", icon: "bx bx-mobile-alt" },
     { name: "Game Design", icon: "bx bx-game" }
   ];
