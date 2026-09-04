@@ -1,6 +1,6 @@
-import React from 'react';
 import "../styles/Footer.css";
-import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { personalInfo } from "../data/info";
 
 function Footer() {
   const anioActual = new Date().getFullYear();
@@ -8,20 +8,32 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        {/* Lado Izquierdo: Copyright */}
         <p className="footer-copy">
-          &copy; {anioActual} <span>Axel Cortes</span> | Web & Game Developer
+          &copy; {anioActual} <span>{personalInfo.name}</span> | Web &amp; Game
+          Developer
         </p>
 
-        {/* Lado Derecho: Redes */}
         <div className="footer-links">
-          <a href="https://github.com/AxelCortes162" target="_blank" rel="noreferrer" title="GitHub">
+          <a
+            href={personalInfo.github}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub de Axel Cortes"
+          >
             <FaGithub />
           </a>
-          <a href="https://www.linkedin.com/in/axel-alejandro-cortes-fonseca/" target="_blank" rel="noreferrer" title="LinkedIn">
+          <a
+            href={personalInfo.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn de Axel Cortes"
+          >
             <FaLinkedin />
           </a>
-          <a href="mailto:axelcortes.developer@gmail.com" title="Email">
+          <a
+            href={`mailto:${personalInfo.email}`}
+            aria-label="Enviar correo a Axel Cortes"
+          >
             <FaEnvelope />
           </a>
         </div>

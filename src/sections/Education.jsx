@@ -1,4 +1,3 @@
-import React from 'react';
 import "../styles/Education.css";
 
 function Education() {
@@ -7,20 +6,14 @@ function Education() {
       escuela: "UVEG",
       titulo: "Ingeniería en Sistemas Computacionales",
       periodo: "2023 - Presente",
-      lado: "left"
+      lado: "left",
     },
     {
-      escuela: "AluraLatam",
-      titulo: "FrontEnd Development Program",
+      escuela: "AluraLatam · Oracle Next Education",
+      titulo: "Front-End Development Program",
       periodo: "2023 - 2024",
-      lado: "right"
+      lado: "right",
     },
-    {
-      escuela: "UNAM",
-      titulo: "Licenciatura en Enfermería (Incompleta)",
-      periodo: "2019 - 2022",
-      lado: "left"
-    }
   ];
 
   return (

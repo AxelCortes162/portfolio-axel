@@ -15,11 +15,12 @@
   box-sizing: border-box;
 }
 
-/* El logo grande como lo pediste */
+/* Lockup horizontal: isotipo + nombre */
 .logo-img {
-  height: 80px;
+  height: 58px;
   width: auto;
-  transition: .3s;
+  display: block;
+  transition: 0.3s;
 }
 
 .logo-img:hover {
@@ -166,6 +167,6 @@
     transform: rotate(45deg) translate(-6px, -7px);
   }
   .logo-img {
-    height: 50px; /* Logo un poco más pequeño en móvil */
+    height: 40px; /* Logo un poco más pequeño en móvil */
   }
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../styles/Navbar.css";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +39,14 @@ function Navbar() {
   return (
     <nav className="navbar">
       {/* Logo: Siempre a la izquierda */}
-      <Link to="/" onClick={handleHomeClick}>
-        <img src={logo} alt="Logo Axel" className="logo-img" />
+      <Link to="/" onClick={handleHomeClick} aria-label="Ir al inicio">
+        <img
+          src={logo}
+          alt="Axel Cortes — VR & Game Developer"
+          className="logo-img"
+          width="420"
+          height="120"
+        />
       </Link>
 
       {/* --- RENDERIZADO CONDICIONAL --- */}
@@ -53,17 +59,19 @@ function Navbar() {
       ) : (
         /* 2. MODO HOME: Navbar completo con menú hamburguesa */
         <>
-          <button 
-            className={`nav-toggle ${isOpen ? "open" : ""}`} 
+          <button
+            className={`nav-toggle ${isOpen ? "open" : ""}`}
             onClick={toggleMenu}
-            aria-label="Abrir menú"
+            aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isOpen}
+            aria-controls="menu-principal"
           >
             <span></span>
             <span></span>
             <span></span>
           </button>
 
-          <ul className={`menu ${isOpen ? "open" : ""}`}>
+          <ul id="menu-principal" className={`menu ${isOpen ? "open" : ""}`}>
             <li>
               <Link to="/" onClick={handleHomeClick}>Inicio</Link>
             </li>

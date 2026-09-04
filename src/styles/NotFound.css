@@ -1,0 +1,32 @@
+.notfound {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 120px 20px 60px;
+}
+
+.notfound-code {
+  font-size: clamp(72px, 18vw, 140px);
+  font-weight: 800;
+  line-height: 1;
+  color: #00ffd5;
+  text-shadow: 0 0 30px rgba(0, 255, 213, 0.35);
+  margin: 0;
+}
+
+.notfound h1 {
+  font-size: clamp(22px, 4vw, 32px);
+  color: #fff;
+  margin: 0;
+}
+
+.notfound-text {
+  color: #94a3b8;
+  max-width: 420px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}

@@ -1,6 +1,6 @@
 /* --- HERO FULLSCREEN --- */
 .hero-fullscreen {
-  height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -8,33 +8,33 @@
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: 0 10%;
+  padding: 120px 10% 90px;
   box-sizing: border-box;
 }
 
 .hero-container {
   display: flex;
   align-items: center;
-  justify-content: center; /* Centramos todo el contenido */
-  gap: clamp(40px, 5vw, 80px); /* Gap responsivo */
+  justify-content: center;
+  gap: clamp(40px, 5vw, 80px);
   max-width: 1400px;
   z-index: 2;
   width: 100%;
 }
 
-/* --- ESTILO CIRCULAR DE LA FOTO (REINCORPORADO) --- */
+/* --- FOTO --- */
 .hero-visual {
-  flex-shrink: 0; /* Evita que la foto se comprima */
+  flex-shrink: 0;
 }
 
 .hero-img {
-  width: clamp(180px, 20vw, 250px); /* Tamaño responsivo */
+  width: clamp(180px, 20vw, 250px);
   height: clamp(180px, 20vw, 250px);
-  border-radius: 50%; /* Círculo perfecto */
+  border-radius: 50%;
   border: 4px solid #00ffd5;
-  /* Glow neón intenso original */
-  box-shadow: 0 0 30px rgba(0, 255, 213, 0.6), 
-              inset 0 0 15px rgba(0, 255, 213, 0.4);
+  box-shadow:
+    0 0 30px rgba(0, 255, 213, 0.6),
+    inset 0 0 15px rgba(0, 255, 213, 0.4);
   object-fit: cover;
   transition: 0.4s ease;
 }
@@ -48,7 +48,7 @@
 .hero-text {
   display: flex;
   flex-direction: column;
-  max-width: 600px;
+  max-width: 680px;
 }
 
 .hero-text h1 {
@@ -70,7 +70,6 @@
   letter-spacing: 1px;
 }
 
-/* El Sobre mí sutil */
 .hero-bio {
   color: #a0aec0;
   line-height: 1.6;
@@ -83,10 +82,90 @@
   font-weight: bold;
 }
 
-/* --- INDICADOR DE SCROLL ANIMADO --- */
+/* ============================================================
+   BOTONES / CALL TO ACTION
+   ============================================================ */
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn i {
+  font-size: 19px;
+}
+
+.btn-primary {
+  background: #00ffd5;
+  color: #020617;
+  box-shadow: 0 0 20px rgba(0, 255, 213, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 255, 213, 0.45);
+}
+
+.btn-ghost {
+  background: rgba(0, 255, 213, 0.04);
+  color: #00ffd5;
+  border-color: rgba(0, 255, 213, 0.35);
+}
+
+.btn-ghost:hover {
+  background: rgba(0, 255, 213, 0.12);
+  border-color: #00ffd5;
+  transform: translateY(-3px);
+}
+
+.btn:focus-visible,
+.hero-social a:focus-visible {
+  outline: 2px solid #00ffd5;
+  outline-offset: 3px;
+}
+
+/* --- REDES --- */
+.hero-social {
+  display: flex;
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.hero-social a {
+  color: #64748b;
+  font-size: 26px;
+  line-height: 1;
+  transition: 0.3s ease;
+}
+
+.hero-social a:hover {
+  color: #00ffd5;
+  transform: translateY(-3px);
+}
+
+/* --- INDICADOR DE SCROLL --- */
 .scroll-indicator {
   position: absolute;
-  bottom: 40px;
+  bottom: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,7 +202,6 @@
   animation: arrow-down 2s infinite;
 }
 
-/* Animaciones */
 @keyframes scroll-wheel {
   0% { transform: translateY(0); opacity: 1; }
   100% { transform: translateY(18px); opacity: 0; }
@@ -135,44 +213,69 @@
   100% { opacity: 0; transform: rotate(45deg) translate(10px, 10px); }
 }
 
-/* --- AJUSTES ESPECÍFICOS PARA MÓVIL --- */
+/* --- MÓVIL --- */
 @media (max-width: 768px) {
   .hero-fullscreen {
-    height: 93vh;
-    padding: 0 20px; /* Menos espacio a los lados para aprovechar el ancho */
-    justify-content: center; /* Centrado vertical total */
+    padding: 110px 20px 80px;
   }
 
   .hero-container {
-    flex-direction: column; /* Foto arriba, texto abajo */
-    gap: 25px; /* Espacio moderado entre elementos */
-    text-align: center; /* Todo el texto al centro */
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
   }
 
   .hero-img {
-    width: 160px; /* Tamaño ideal para que no tape todo el texto */
-    height: 160px;
-    border-width: 3px; /* Un poco más delgado el borde para balancear */
+    width: 150px;
+    height: 150px;
+    border-width: 3px;
   }
 
   .hero-text h1 {
-    font-size: 38px; /* Tamaño grande pero que no se corte */
+    font-size: 36px;
     line-height: 1.1;
   }
 
   .hero-text h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 17px;
+    margin-bottom: 12px;
   }
 
   .hero-bio {
-    font-size: 14px; /* Un poco más pequeña para que quepa bien */
-    padding: 0 10px; /* Margen interno para que no toque los bordes */
+    font-size: 14px;
   }
 
-  /* Ajuste de la flecha indicadora */
+  .hero-cta {
+    justify-content: center;
+    margin-top: 24px;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 11px 18px;
+    font-size: 12.5px;
+  }
+
+  .hero-social {
+    justify-content: center;
+    margin-top: 20px;
+  }
+
   .scroll-indicator {
-    bottom: 20px;
-    transform: scale(0.8); /* La hacemos un poquito más pequeña */
+    display: none; /* En móvil el scroll es obvio y estorba a los botones */
+  }
+}
+
+/* Respeta la preferencia de menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .wheel,
+  .arrow span {
+    animation: none;
+  }
+
+  .hero-img:hover,
+  .btn:hover,
+  .hero-social a:hover {
+    transform: none;
   }
 }

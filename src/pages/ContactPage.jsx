@@ -3,14 +3,24 @@ import Swal from "sweetalert2";
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { personalInfo } from "../data/info";
 import "../styles/ContactPage.css";
+
+const alertaBase = {
+  background: "#0f172a",
+  color: "#fff",
+  confirmButtonColor: "#00ffd5",
+};
 
 function ContactPage() {
   const [enviando, setEnviando] = useState(false);
 
-  // Forzar que la página inicie desde arriba al cargar
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.title = "Contacto — Axel Cortes";
+    return () => {
+      document.title = "Axel Cortes — VR & Game Developer";
+    };
   }, []);
 
   const handleSubmit = async (e) => {
@@ -20,18 +30,15 @@ function ContactPage() {
 
     const nombre = data.get("name").trim();
     const email = data.get("email").trim();
-    const telefono = data.get("phone").trim();
     const mensaje = data.get("message").trim();
 
-    // Validaciones básicas
-    if (!nombre || !email || !telefono || !mensaje) {
+    // El teléfono es opcional: no todo el mundo quiere dejarlo
+    if (!nombre || !email || !mensaje) {
       Swal.fire({
         title: "Faltan datos",
-        text: "Por favor, completa todos los campos.",
+        text: "Completa tu nombre, correo y mensaje.",
         icon: "warning",
-        background: "#0f172a",
-        color: "#fff",
-        confirmButtonColor: "#00ffd5"
+        ...alertaBase,
       });
       return;
     }
@@ -42,32 +49,24 @@ function ContactPage() {
       const response = await fetch("https://formspree.io/f/xbdpkdzq", {
         method: "POST",
         body: data,
-        headers: {
-          'Accept': 'application/json'
-        }
+        headers: { Accept: "application/json" },
       });
 
-      if (response.ok) {
-        Swal.fire({
-          title: "¡Enviado!",
-          text: "Gracias por contactarme, te responderé pronto.",
-          icon: "success",
-          background: "#0f172a",
-          color: "#fff",
-          confirmButtonColor: "#00ffd5"
-        });
-        form.reset();
-      } else {
-        throw new Error();
-      }
-    } catch (error) {
+      if (!response.ok) throw new Error("Respuesta no OK");
+
+      Swal.fire({
+        title: "¡Enviado!",
+        text: "Gracias por contactarme, te responderé pronto.",
+        icon: "success",
+        ...alertaBase,
+      });
+      form.reset();
+    } catch {
       Swal.fire({
         title: "Error",
-        text: "Hubo un problema al enviar el mensaje. Inténtalo de nuevo.",
+        text: "Hubo un problema al enviar el mensaje. Inténtalo de nuevo o escríbeme por WhatsApp.",
         icon: "error",
-        background: "#0f172a",
-        color: "#fff",
-        confirmButtonColor: "#00ffd5"
+        ...alertaBase,
       });
     } finally {
       setEnviando(false);
@@ -80,83 +79,115 @@ function ContactPage() {
       <main className="page-center">
         <div className="contacto-full">
           <Card>
-            <h2 className="titulo-contacto">¡Hablemos de tu próximo proyecto!</h2>
-            
-            <form className="formulario" onSubmit={handleSubmit}>
-              <div className="campo">
-                <label>
-                  <i className='bx bx-user'></i> Nombre Completo
-                </label>
-                <input 
-                  type="text" 
-                  name="name" 
-                  placeholder="Ej. Axel Cortes" 
-                  required 
-                />
-              </div>
+            <h1 className="titulo-contacto">
+              ¡Hablemos de tu próximo proyecto!
+            </h1>
 
+            <form className="formulario" onSubmit={handleSubmit} noValidate>
               <div className="campo">
-                <label>
-                  <i className='bx bx-envelope'></i> Correo Electrónico
+                <label htmlFor="name">
+                  <i className="bx bx-user" aria-hidden="true"></i> Nombre
+                  completo
                 </label>
-                <input 
-                  type="email" 
-                  name="email" 
-                  placeholder="tu@email.com" 
-                  required 
-                />
-              </div>
-
-              <div className="campo">
-                <label>
-                  <i className='bx bx-phone'></i> Teléfono / Celular
-                </label>
-                <input 
-                  type="tel" 
-                  name="phone" 
-                  placeholder="5512345678" 
-                  maxLength="10"
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Ej. Axel Cortes"
+                  autoComplete="name"
                   required
-                  onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
                 />
               </div>
 
               <div className="campo">
-                <label>
-                  <i className='bx bx-message-detail'></i> Mensaje
+                <label htmlFor="email">
+                  <i className="bx bx-envelope" aria-hidden="true"></i> Correo
+                  electrónico
                 </label>
-                <textarea 
-                  name="message" 
-                  rows="4" 
-                  placeholder="¿En qué puedo ayudarte?" 
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="tu@email.com"
+                  autoComplete="email"
+                  required
+                />
+              </div>
+
+              <div className="campo">
+                <label htmlFor="phone">
+                  <i className="bx bx-phone" aria-hidden="true"></i> Teléfono{" "}
+                  <span className="campo-opcional">(opcional)</span>
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  name="phone"
+                  placeholder="55 1234 5678"
+                  autoComplete="tel"
+                  inputMode="numeric"
+                  pattern="[0-9\s()+-]{7,20}"
+                  maxLength="20"
+                />
+              </div>
+
+              <div className="campo">
+                <label htmlFor="message">
+                  <i className="bx bx-message-detail" aria-hidden="true"></i>{" "}
+                  Mensaje
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  placeholder="¿En qué puedo ayudarte?"
                   required
                 ></textarea>
               </div>
 
-              <button type="submit" className="btn-enviar" disabled={enviando}>
+              <button
+                type="submit"
+                className="btn-enviar"
+                disabled={enviando}
+                aria-busy={enviando}
+              >
                 {enviando ? (
-                  <span className="spinner-loader"></span>
+                  <span className="spinner-loader" aria-label="Enviando"></span>
                 ) : (
-                  <>ENVIAR MENSAJE <i className='bx bx-send'></i></>
+                  <>
+                    ENVIAR MENSAJE{" "}
+                    <i className="bx bx-send" aria-hidden="true"></i>
+                  </>
                 )}
               </button>
             </form>
 
-            <div className="whatsapp-divider"><span>O TAMBIÉN</span></div>
+            <div className="whatsapp-divider">
+              <span>O TAMBIÉN</span>
+            </div>
 
             <div className="whatsapp-section">
-              <a 
-                href="https://wa.me/525586694753?text=¡Hola!%20Estoy%20interesado%20en%20tu%20trabajo." 
-                target="_blank" 
+              <a
+                href={`${personalInfo.whatsapp}?text=${encodeURIComponent(
+                  "¡Hola! Estoy interesado en tu trabajo."
+                )}`}
+                target="_blank"
                 rel="noreferrer"
                 className="btn-whatsapp"
               >
-                <i className='bx bxl-whatsapp'></i>  WHATSAPP
+                <i className="bx bxl-whatsapp" aria-hidden="true"></i> WHATSAPP
+              </a>
+              <a
+                href={`mailto:${personalInfo.email}`}
+                className="btn-whatsapp btn-email"
+              >
+                <i className="bx bx-envelope" aria-hidden="true"></i> CORREO
               </a>
             </div>
           </Card>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

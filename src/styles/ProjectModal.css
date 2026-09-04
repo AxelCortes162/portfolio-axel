@@ -163,31 +163,20 @@
   line-height: 1.6;
 }
 
-/* --- BOTÓN DE ACCIÓN (STORE) --- */
+/* --- BOTONES DE ACCIÓN (Store / GitHub) --- */
+/* Los estilos .btn, .btn-primary y .btn-ghost viven en Hero.css */
 .modal-footer-action {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 14px;
   margin-top: 10px;
 }
 
-.btn-store {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: #00ffd5;
-  color: #020617;
-  padding: 14px 30px;
-  border-radius: 12px;
-  font-weight: 800;
-  text-decoration: none;
-  font-size: 15px;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-}
-
-.btn-store:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 255, 213, 0.4);
+.modal-close:focus-visible,
+.modal-footer-action .btn:focus-visible {
+  outline: 2px solid #00ffd5;
+  outline-offset: 3px;
 }
 
 /* --- ANIMACIONES --- */
@@ -219,8 +208,25 @@
     gap: 20px;
   }
 
-  .btn-store {
+  .modal-footer-action {
+    flex-direction: column;
+  }
+
+  .modal-footer-action .btn {
     width: 100%;
-    justify-content: center;
+  }
+}
+
+/* Respeta la preferencia de menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay,
+  .modal-content {
+    animation-duration: 0.01ms;
+    opacity: 1;
+    transform: none;
+  }
+
+  .modal-close:hover {
+    transform: none;
   }
 }
