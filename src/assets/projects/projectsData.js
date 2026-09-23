@@ -12,6 +12,7 @@ import curpitas from "../curpitas.webp";
 import lorelyfotos from "../loryfotos.webp";
 import aluraFlix from "../aluraflix.webp";
 import botanasMony from "../botanas.webp";
+import tocaaqui from "../tocaaqui.png";
 
 export const projectsData = [
   {
@@ -134,17 +135,17 @@ export const projectsData = [
   },
   {
     id: 6,
-    title: "Alura Flix",
+    title: "Tocaaqui",
     category: "web",
     description:
-      "Plataforma estilo Netflix para organizar videos por categorías, con modales y trailers dinámicos.",
-    tags: ["React", "CSS Modules", "API Rest", "Frontend"],
+      "Placas con QR y NFC para negocios: el cliente escanea o acerca su celular y llega a donde tú decidas (reseña, menú, WhatsApp o pago). Función RPC en Supabase resuelve el destino y registra el escaneo en una sola llamada.",
+    tags: ["React", "Supabase", "Vercel Edge Functions", "QR + NFC"],
     format: "horizontal",
-    image: aluraFlix,
+    image: tocaaqui,
     type: "link",
-    link: "https://alura-flix-sepia.vercel.app/",
+    link: "https://tocaaqui.app",
     linkLabel: "Ver sitio",
-    repo: "https://github.com/AxelCortes162/AluraFlix-API",
+    repo: "https://github.com/AxelCortes162/tocaaqui",
   },
   {
     id: 7,
