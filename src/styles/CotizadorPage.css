@@ -1,0 +1,459 @@
+.cotizador-page {
+  min-height: 100dvh;
+  padding: 120px 20px 60px;
+}
+
+.cotizador-pantalla {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.cotizador-titulo {
+  color: #00ffd5;
+  font-size: clamp(26px, 4vw, 36px);
+  text-shadow: 0 0 15px rgba(0, 255, 213, 0.25);
+}
+
+.cotizador-intro {
+  color: #94a3b8;
+  margin: 8px 0 32px;
+}
+
+.cotizador-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ---------- Grupos de opciones ---------- */
+.cotizador-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cotizador-grupo {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cotizador-grupo legend {
+  color: #00ffd5;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.paquetes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.opcion {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 213, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.opcion:hover {
+  border-color: rgba(0, 255, 213, 0.5);
+}
+
+.opcion.activa {
+  border-color: #00ffd5;
+  background: rgba(0, 255, 213, 0.08);
+  box-shadow: 0 0 16px rgba(0, 255, 213, 0.2);
+}
+
+.opcion input {
+  accent-color: #00ffd5;
+}
+
+.opcion:has(input:focus-visible) {
+  outline: 2px solid #00ffd5;
+  outline-offset: 3px;
+}
+
+/* Tarjeta de paquete: apilada */
+.paquete {
+  flex-direction: column;
+}
+
+.paquete input {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.opcion-nombre {
+  font-weight: bold;
+}
+
+.opcion-precio {
+  color: #00ffd5;
+  font-weight: bold;
+}
+
+.paquete .opcion-precio {
+  font-size: 1.4rem;
+}
+
+.paquete ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.paquete li i {
+  color: #00ffd5;
+}
+
+/* Opción que depende de la de arriba (pagar el plan mes a mes) */
+.opcion-sub {
+  margin-left: 28px;
+  border-style: dashed;
+}
+
+/* Nota bajo "Sin plan anual" */
+.opcion-nota {
+  display: flex;
+  gap: 8px;
+  margin-left: 28px;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.opcion-nota i {
+  color: #00ffd5;
+  font-size: 18px;
+}
+
+/* Fila: plan anual / factura */
+.fila {
+  align-items: center;
+}
+
+.fila .opcion-precio {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ---------- Datos del cliente ---------- */
+.cotizador-campos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.campos-nota {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.campo-cot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo-cot label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.cotizador-campos input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 213, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  font: inherit;
+  font-weight: normal;
+  outline: none;
+  transition: 0.3s;
+}
+
+.cotizador-campos input:focus {
+  border-color: #00ffd5;
+  box-shadow: 0 0 10px rgba(0, 255, 213, 0.2);
+}
+
+.cotizador-campos input[aria-invalid="true"] {
+  border-color: #f87171;
+}
+
+.campo-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.campo-error i {
+  font-size: 18px;
+}
+
+.campo-opcional {
+  color: #94a3b8;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+/* Oculto a la vista, pero lo leen los lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Resumen ---------- */
+.cotizador-resumen {
+  position: sticky;
+  top: 110px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 213, 0.3);
+  border-radius: 15px;
+  padding: 24px;
+}
+
+.cotizador-resumen h2 {
+  color: #00ffd5;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.cotizador-resumen dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 16px;
+  color: #cbd5e1;
+}
+
+.cotizador-resumen dd {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cotizador-resumen .total {
+  color: #00ffd5;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border-top: 1px solid rgba(0, 255, 213, 0.3);
+  padding-top: 10px;
+}
+
+.cotizador-resumen .descuento {
+  color: #86efac;
+}
+
+/* La mensualidad va aparte del total */
+.cotizador-resumen .mensualidad {
+  color: #f8fafc;
+  font-weight: bold;
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  padding-top: 10px;
+}
+
+.metodos-pago {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.metodos-pago i {
+  color: #00ffd5;
+  font-size: 18px;
+}
+
+.cotizador-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+
+/* ---------- Barra del total en celular (oculta en escritorio) ---------- */
+.barra-total-movil {
+  display: none;
+}
+
+/* ---------- Hoja de impresión (oculta en pantalla) ---------- */
+.hoja-impresion {
+  display: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .cotizador-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cotizador-resumen {
+    position: static;
+  }
+
+  .barra-total-movil {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(10, 15, 26, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 255, 213, 0.3);
+  }
+
+  .barra-total-movil strong {
+    color: #00ffd5;
+    font-size: 1.15rem;
+    margin-left: 6px;
+  }
+
+  .barra-total-movil a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgba(0, 255, 213, 0.35);
+    border-radius: 10px;
+    color: #00ffd5;
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .barra-total-movil a:focus-visible {
+    outline: 2px solid #00ffd5;
+    outline-offset: 3px;
+  }
+
+  /* Deja espacio para que la barra no tape el Footer
+     ni el campo que tiene el foco */
+  body:has(.barra-total-movil) {
+    padding-bottom: 80px;
+  }
+
+  html:has(.barra-total-movil) {
+    scroll-padding-bottom: 90px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cotizador-page {
+    padding: 100px 16px 40px;
+  }
+
+  .paquetes,
+  .cotizador-campos {
+    grid-template-columns: 1fr;
+  }
+
+  .fila {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---------- Impresión / PDF ---------- */
+@media print {
+  @page {
+    margin: 18mm;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .navbar,
+  .footer,
+  .fondo-particulas,
+  .cotizador-pantalla {
+    display: none !important;
+  }
+
+  .cotizador-page {
+    padding: 0;
+    min-height: 0;
+  }
+
+  .hoja-impresion {
+    display: block;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  .hoja-impresion header {
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .hoja-impresion h1 {
+    font-size: 22pt;
+  }
+
+  .hoja-impresion table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+
+  .hoja-impresion td {
+    padding: 8px 0;
+    border-bottom: 1px solid #ccc;
+    vertical-align: top;
+  }
+
+  .hoja-impresion td:last-child {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .hoja-impresion small {
+    display: block;
+    color: #555;
+    font-size: 9pt;
+  }
+
+  .hoja-impresion .total td {
+    font-weight: bold;
+    font-size: 14pt;
+    border-top: 2px solid black;
+  }
+
+  .vigencia {
+    color: #555;
+    font-size: 10pt;
+  }
+}

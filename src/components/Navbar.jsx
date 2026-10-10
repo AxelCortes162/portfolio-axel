@@ -8,8 +8,8 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation(); // Detecta la ruta actual
 
-  // Verificamos si el usuario está en la página de contacto
-  const isContactPage = location.pathname === "/contacto";
+  // Fuera del inicio (contacto, cotizador) los enlaces #skills, #projects no sirven
+  const isSubPage = location.pathname !== "/";
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -50,8 +50,8 @@ function Navbar() {
       </Link>
 
       {/* --- RENDERIZADO CONDICIONAL --- */}
-      {isContactPage ? (
-        /* 1. MODO CONTACTO: Solo botón de regresar, sin hamburguesa */
+      {isSubPage ? (
+        /* 1. MODO SUBPÁGINA: Solo botón de regresar, sin hamburguesa */
         <Link to="/" onClick={handleHomeClick} className="nav-back-only">
           <i className='bx bx-left-arrow-alt'></i>
           <span>INICIO</span>
@@ -83,6 +83,9 @@ function Navbar() {
             </li>
             <li>
               <a href="#projects" onClick={() => setIsOpen(false)}>Proyectos</a>
+            </li>
+            <li>
+              <Link to="/cotizador" onClick={() => setIsOpen(false)}>Cotizador</Link>
             </li>
             <li>
               <Link to="/contacto" onClick={() => setIsOpen(false)}>Contacto</Link>

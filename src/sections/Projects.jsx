@@ -1,179 +1,204 @@
 import { useState } from "react";
-import Card from "../components/Card";
+import { motion as Motion } from "framer-motion";
+import SectionTitle from "../components/SectionTitle";
 import ProjectModal from "../components/ProjectModal";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { projectsData } from "../assets/projects/projectsData";
-import "../styles/Projects.css";
+
+const categorias = [
+  { id: "games", label: "Videojuegos & VR", icon: "bx bx-joystick" },
+  { id: "web", label: "Web Development", icon: "bx bx-code-alt" },
+];
+
+const abreModal = (project) =>
+  project.type === "vr" || project.category === "games";
+
+// Los <video> de las tarjetas se reproducen solo con el cursor encima
+const reproducir = (e) => {
+  const video = e.currentTarget.querySelector("video");
+  if (video) {
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  }
+};
+
+const pausar = (e) => {
+  const video = e.currentTarget.querySelector("video");
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+  }
+};
+
+function ProjectCard({ project, onOpen }) {
+  const vertical = project.format === "vertical";
+
+  // "Enlace estirado": el botón/enlace del título cubre toda la tarjeta con
+  // ::after, así la tarjeta entera es clicable sin anidar elementos interactivos
+  const accionClase =
+    "text-left outline-none after:absolute after:inset-0 after:rounded-2xl after:content-['']";
+
+  return (
+    <Motion.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5 }}
+      onMouseEnter={reproducir}
+      onMouseLeave={pausar}
+      className="group relative flex w-full max-w-[400px] flex-col rounded-2xl border border-primary/30 bg-white/5 p-5 transition-[transform,box-shadow] duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgb(0_255_213/0.35)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-primary motion-reduce:hover:translate-y-0"
+    >
+      <div
+        className={cn(
+          "relative mb-5 flex items-center justify-center overflow-hidden rounded-xl border border-white/5 bg-[#010409]",
+          vertical ? "h-80 md:h-[450px]" : "h-50 md:h-60"
+        )}
+      >
+        <img
+          src={project.image}
+          alt={`Captura de ${project.title}`}
+          loading="lazy"
+          decoding="async"
+          className={cn(
+            "absolute h-full",
+            vertical ? "w-auto object-contain" : "w-full object-cover"
+          )}
+        />
+
+        {/* preload="metadata" descarga solo la cabecera del MP4 (unos KB) */}
+        {project.videoPreview && (
+          <video
+            src={project.videoPreview}
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            tabIndex={-1}
+            aria-hidden="true"
+            className={cn(
+              "pointer-events-none absolute h-full opacity-0 transition-opacity duration-400 group-hover:opacity-100",
+              vertical ? "w-auto object-contain" : "w-full object-cover"
+            )}
+          />
+        )}
+
+        {project.type === "vr" && (
+          <Badge className="absolute top-3 right-3 z-10 rounded-full border-primary/30 bg-primary/20 text-primary backdrop-blur-sm">
+            VR Experience
+          </Badge>
+        )}
+        {project.featured && (
+          <Badge className="absolute top-3 left-3 z-10 rounded-full font-extrabold tracking-wide uppercase shadow-[0_4px_16px_rgb(0_255_213/0.35)]">
+            <i className="bx bxs-star" aria-hidden="true"></i> Destacado
+          </Badge>
+        )}
+      </div>
+
+      <h3 className="mb-2.5 font-display text-xl font-bold md:text-[22px]">
+        {abreModal(project) ? (
+          <button type="button" onClick={() => onOpen(project)} className={accionClase}>
+            {project.title}
+          </button>
+        ) : (
+          <a href={project.link} target="_blank" rel="noreferrer" className={accionClase}>
+            {project.title}
+          </a>
+        )}
+      </h3>
+      <p className="mb-5 grow text-sm leading-relaxed text-muted-foreground">
+        {project.description}
+      </p>
+
+      <ul className="mb-5 flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <li key={tag}>
+            <Badge variant="outline" className="border-primary/15 bg-primary/5 text-primary">
+              {tag}
+            </Badge>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/5 pt-4">
+        <span className="flex items-center gap-2 text-sm font-bold text-primary" aria-hidden="true">
+          {abreModal(project) ? (
+            <>
+              <i className="bx bx-plus-circle"></i> Ver detalles
+            </>
+          ) : (
+            <>
+              <i className="bx bx-link-external"></i> Ver proyecto
+            </>
+          )}
+        </span>
+
+        {/* z-10 lo pone encima del enlace estirado */}
+        {project.repo && (
+          <a
+            href={project.repo}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Ver el código de ${project.title} en GitHub`}
+            className="relative z-10 inline-flex h-11 items-center gap-1.5 rounded-lg border border-white/10 px-3 text-xs font-bold text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <i className="bx bxl-github text-base" aria-hidden="true"></i> Código
+          </a>
+        )}
+      </div>
+    </Motion.article>
+  );
+}
 
 function Projects() {
-  const [activeTab, setActiveTab] = useState("games");
   const [selectedProject, setSelectedProject] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
 
-  const filteredProjects = projectsData.filter(
-    (project) => project.category === activeTab
-  );
-
-  const opensModal = (project) =>
-    project.type === "vr" || project.category === "games";
-
-  const handleMouseEnter = (e) => {
-    const video = e.currentTarget.querySelector("video");
-    if (video) {
-      video.currentTime = 0;
-      video.play().catch(() => {});
-    }
-  };
-
-  // Antes el video seguía reproduciéndose (y consumiendo CPU) al salir el cursor
-  const handleMouseLeave = (e) => {
-    const video = e.currentTarget.querySelector("video");
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-    }
-  };
-
-  const handleProjectClick = (project) => {
-    if (opensModal(project)) {
-      setSelectedProject(project);
-    } else {
-      window.open(project.link, "_blank", "noopener,noreferrer");
-    }
-  };
-
-  const handleKeyDown = (e, project) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      handleProjectClick(project);
-    }
+  const abrir = (project) => {
+    setSelectedProject(project);
+    setModalAbierto(true);
   };
 
   return (
-    <section id="projects" className="projects-section">
-      <h2>
+    <section id="projects" className="flex flex-col items-center py-10">
+      <SectionTitle>
         Mis <span>Proyectos</span>
-      </h2>
+      </SectionTitle>
 
-      <div className="projects-tabs" role="tablist" aria-label="Categorías de proyectos">
-        <button
-          role="tab"
-          aria-selected={activeTab === "games"}
-          className={activeTab === "games" ? "active" : ""}
-          onClick={() => setActiveTab("games")}
-        >
-          <i className="bx bx-joystick"></i> Videojuegos &amp; VR
-        </button>
-        <button
-          role="tab"
-          aria-selected={activeTab === "web"}
-          className={activeTab === "web" ? "active" : ""}
-          onClick={() => setActiveTab("web")}
-        >
-          <i className="bx bx-code-alt"></i> Web Development
-        </button>
-      </div>
+      <Tabs defaultValue="games" className="w-full items-center gap-0">
+        <TabsList className="mb-12 gap-2 bg-transparent p-0 group-data-[orientation=horizontal]/tabs:h-auto">
+          {categorias.map((cat) => (
+            <TabsTrigger
+              key={cat.id}
+              value={cat.id}
+              className="h-11 flex-none rounded-xl border-white/10 bg-white/[0.02] px-5 font-semibold data-[state=active]:border-primary/40 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-[0_0_15px_rgb(0_255_213/0.1)] max-sm:px-4 max-sm:text-xs"
+            >
+              <i className={`${cat.icon} text-lg`} aria-hidden="true"></i>
+              {cat.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-      <div className="projects-grid">
-        {filteredProjects.map((project) => (
-          <div
-            key={project.id}
-            className="project-item"
-            data-format={project.format}
-            role="button"
-            tabIndex={0}
-            aria-label={
-              opensModal(project)
-                ? `Ver detalles de ${project.title}`
-                : `Abrir ${project.title} en una pestaña nueva`
-            }
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => handleProjectClick(project)}
-            onKeyDown={(e) => handleKeyDown(e, project)}
+        {categorias.map((cat) => (
+          <TabsContent
+            key={cat.id}
+            value={cat.id}
+            className="grid w-full max-w-6xl grid-cols-[repeat(auto-fill,minmax(min(100%,350px),1fr))] justify-items-center gap-8"
           >
-            <Card>
-              <div className="project-card-content">
-                <div className="project-image-wrapper">
-                  <img
-                    src={project.image}
-                    alt={`Captura de ${project.title}`}
-                    className="project-img"
-                    loading="lazy"
-                    decoding="async"
-                  />
-
-                  {/* preload="metadata" descarga solo la cabecera del MP4 (unos
-                      KB) en vez de los megas completos, pero deja que play()
-                      arranque al instante al pasar el cursor. */}
-                  {project.videoPreview && (
-                    <video
-                      src={project.videoPreview}
-                      className="project-video"
-                      loop
-                      muted
-                      playsInline
-                      preload="metadata"
-                      tabIndex={-1}
-                      aria-hidden="true"
-                    />
-                  )}
-
-                  {project.type === "vr" && (
-                    <div className="vr-badge">VR Experience</div>
-                  )}
-
-                  {project.featured && (
-                    <div className="featured-badge">
-                      <i className="bx bxs-star"></i> Destacado
-                    </div>
-                  )}
-                </div>
-
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-
-                <div className="project-tags">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="project-footer">
-                  <span className="project-action-indicator">
-                    {opensModal(project) ? (
-                      <>
-                        <i className="bx bx-plus-circle"></i> Ver detalles
-                      </>
-                    ) : (
-                      <>
-                        <i className="bx bx-link-external"></i> Ver proyecto
-                      </>
-                    )}
-                  </span>
-
-                  {project.repo && (
-                    <a
-                      href={project.repo}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="project-repo-link"
-                      aria-label={`Ver el código de ${project.title} en GitHub`}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <i className="bx bxl-github"></i> Código
-                    </a>
-                  )}
-                </div>
-              </div>
-            </Card>
-          </div>
+            {projectsData
+              .filter((project) => project.category === cat.id)
+              .map((project) => (
+                <ProjectCard key={project.id} project={project} onOpen={abrir} />
+              ))}
+          </TabsContent>
         ))}
-      </div>
+      </Tabs>
 
       <ProjectModal
         project={selectedProject}
-        onClose={() => setSelectedProject(null)}
+        open={modalAbierto}
+        onOpenChange={setModalAbierto}
       />
     </section>
   );

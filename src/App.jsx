@@ -10,10 +10,12 @@ import { personalInfo } from "./data/info";
 
 // Se cargan solo cuando se visitan: sacan SweetAlert2 del bundle inicial
 const ContactPage = lazy(() => import("./pages/ContactPage"));
+const CotizadorPage = lazy(() => import("./pages/CotizadorPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 import Footer from "./components/Footer";
 import "boxicons/css/boxicons.min.css";
-import "./styles/global.css";
+import "@fontsource-variable/space-grotesk";
+import "./styles/index.css";
 
 function Home() {
   return (
@@ -47,8 +49,9 @@ function App() {
       <Suspense fallback={<div className="route-loading" />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* ContactPage ya renderiza su propio Navbar y Footer */}
+          {/* ContactPage y CotizadorPage ya renderizan su propio Navbar y Footer */}
           <Route path="/contacto" element={<ContactPage />} />
+          <Route path="/cotizador" element={<CotizadorPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

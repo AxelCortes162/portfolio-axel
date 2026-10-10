@@ -26,4 +26,9 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  {
+    // Los componentes de shadcn exportan sus variantes (buttonVariants, etc.)
+    files: ['src/components/ui/**'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ])
