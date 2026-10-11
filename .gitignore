@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Salidas de trabajo y cotizaciones de clientes (no van al repo)
+Claude outputs/
