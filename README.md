@@ -15,6 +15,7 @@ Portafolio personal de **Axel Alejandro Cortes Fonseca**, desarrollador de video
 - **Formación académica** en línea de tiempo.
 - **Proyectos** con pestañas (Videojuegos & VR / Web), preview en video al pasar el cursor y modal con detalles técnicos de cada proyecto.
 - **Página de contacto** con formulario (Formspree), WhatsApp y correo.
+- **Cotizador** de páginas web, juegos para celular y experiencias VR: paquetes, extras, plan anual (web), forma de pago e IVA; genera PDF (jsPDF) y mensaje de WhatsApp. Precios y textos en `src/data/precios.js`.
 
 ## Stack
 
@@ -26,7 +27,8 @@ Portafolio personal de **Axel Alejandro Cortes Fonseca**, desarrollador de video
 | Iconos | Boxicons, React Icons |
 | Alertas | SweetAlert2 |
 | Formulario | Formspree |
-| Estilos | CSS puro (sin framework) |
+| Estilos | Tailwind CSS 4 + shadcn/ui, más un CSS por página |
+| PDF | jsPDF (carga diferida) |
 
 ## Correr en local
 
@@ -50,7 +52,9 @@ src/
 ├── assets/          # imágenes, videos y projectsData.js
 ├── components/      # Navbar, Hero, Footer, Card, ProjectModal, ParticlesBackground
 ├── data/info.js     # datos personales, redes y ruta del CV
-├── pages/           # ContactPage, NotFound
+├── data/precios.js  # categorías, paquetes, extras, planes y textos del cotizador
+├── lib/             # utils (cn) y generador del PDF de cotización
+├── pages/           # ContactPage, CotizadorPage, NotFound
 ├── sections/        # Skills, Education, Projects
 └── styles/          # un CSS por componente + global.css
 ```

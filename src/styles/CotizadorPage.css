@@ -46,9 +46,35 @@
   margin-bottom: 12px;
 }
 
-.paquetes {
+/* Categorías: web / juego / VR */
+.categorias {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.categoria {
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  align-items: center;
+}
+
+.categoria input {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.categoria > i {
+  font-size: 2rem;
+  color: #00ffd5;
+}
+
+/* 3 o 4 paquetes: se acomodan solos según el ancho */
+.paquetes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 14px;
 }
 
@@ -119,6 +145,92 @@
 
 .paquete li i {
   color: #00ffd5;
+}
+
+/* Resumen de una línea bajo el precio del paquete */
+.paquete-resumen {
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Tiempo de entrega y nota al pie de la tarjeta */
+.paquete-entrega {
+  margin-top: auto;
+  padding-top: 8px;
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.paquete-entrega i {
+  color: #00ffd5;
+}
+
+.paquete-nota {
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Lo que aplica a todos los paquetes */
+.incluye-todos {
+  margin-top: 6px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(0, 255, 213, 0.3);
+  border-radius: 12px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.incluye-todos p {
+  color: #00ffd5;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.incluye-todos ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.incluye-todos li i {
+  color: #00ffd5;
+}
+
+.incluye-todos .incluye-nota {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 0;
+  color: #f8fafc;
+  font-weight: normal;
+}
+
+.incluye-todos .incluye-nota i {
+  color: #00ffd5;
+  font-size: 18px;
+}
+
+/* Extra que ya viene en el paquete elegido */
+.opcion.incluido {
+  cursor: default;
+  opacity: 0.75;
+}
+
+/* Nombre + descripción en una fila (planes, mes a mes) */
+.fila-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.opcion-detalle {
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 /* Opción que depende de la de arriba (pagar el plan mes a mes) */
@@ -205,6 +317,10 @@
   font-size: 14px;
 }
 
+.cotizador-resumen .campo-error {
+  margin-top: 12px;
+}
+
 .campo-error i {
   font-size: 18px;
 }
@@ -244,11 +360,24 @@
   margin-bottom: 16px;
 }
 
+.resumen-categoria {
+  color: #94a3b8;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: -8px 0 12px;
+}
+
 .cotizador-resumen dl {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 10px 16px;
   color: #cbd5e1;
+}
+
+/* Filas generadas con map: el div no rompe la rejilla */
+.resumen-extra {
+  display: contents;
 }
 
 .cotizador-resumen dd {
@@ -276,6 +405,20 @@
   padding-top: 10px;
 }
 
+.resumen-entrega {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.resumen-entrega i {
+  color: #00ffd5;
+  font-size: 18px;
+}
+
 .metodos-pago {
   display: flex;
   gap: 8px;
@@ -300,11 +443,6 @@
 
 /* ---------- Barra del total en celular (oculta en escritorio) ---------- */
 .barra-total-movil {
-  display: none;
-}
-
-/* ---------- Hoja de impresión (oculta en pantalla) ---------- */
-.hoja-impresion {
   display: none;
 }
 
@@ -374,86 +512,24 @@
     padding: 100px 16px 40px;
   }
 
-  .paquetes,
+  .categorias,
   .cotizador-campos {
     grid-template-columns: 1fr;
   }
 
+  .categoria {
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-right: 44px;
+  }
+
+  .categoria .opcion-detalle {
+    flex-basis: 100%;
+  }
+
   .fila {
     flex-wrap: wrap;
-  }
-}
-
-/* ---------- Impresión / PDF ---------- */
-@media print {
-  @page {
-    margin: 18mm;
-  }
-
-  body {
-    background: white;
-    color: black;
-  }
-
-  .navbar,
-  .footer,
-  .fondo-particulas,
-  .cotizador-pantalla {
-    display: none !important;
-  }
-
-  .cotizador-page {
-    padding: 0;
-    min-height: 0;
-  }
-
-  .hoja-impresion {
-    display: block;
-    font-size: 12pt;
-    line-height: 1.5;
-  }
-
-  .hoja-impresion header {
-    border-bottom: 2px solid black;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-  }
-
-  .hoja-impresion h1 {
-    font-size: 22pt;
-  }
-
-  .hoja-impresion table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-  }
-
-  .hoja-impresion td {
-    padding: 8px 0;
-    border-bottom: 1px solid #ccc;
-    vertical-align: top;
-  }
-
-  .hoja-impresion td:last-child {
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  .hoja-impresion small {
-    display: block;
-    color: #555;
-    font-size: 9pt;
-  }
-
-  .hoja-impresion .total td {
-    font-weight: bold;
-    font-size: 14pt;
-    border-top: 2px solid black;
-  }
-
-  .vigencia {
-    color: #555;
-    font-size: 10pt;
   }
 }

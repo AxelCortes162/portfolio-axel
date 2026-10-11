@@ -10,7 +10,6 @@ import imagenCorazonVR from "../corazon-delator.webp";
 import imagenLeyendasVR from "../casa-lagrimas.webp";
 import curpitas from "../curpitas.webp";
 import lorelyfotos from "../loryfotos.webp";
-import aluraFlix from "../aluraflix.webp";
 import botanasMony from "../botanas.webp";
 import tocaaqui from "../tocaaqui.png";
 

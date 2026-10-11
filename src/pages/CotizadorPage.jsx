@@ -4,7 +4,9 @@ import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { personalInfo } from "../data/info";
 import {
+  categorias,
   paquetes,
+  extras,
   planesAnuales,
   formasDePago,
   METODOS_DE_PAGO,
@@ -30,8 +32,13 @@ const validar = {
       : "Escribe un correo válido, por ejemplo tu@email.com.",
 };
 
+const primerPaquete = (categoriaId) =>
+  paquetes.find((p) => p.categoria === categoriaId).id;
+
 function CotizadorPage() {
-  const [paqueteId, setPaqueteId] = useState(paquetes[0].id);
+  const [categoriaId, setCategoriaId] = useState(categorias[0].id);
+  const [paqueteId, setPaqueteId] = useState(primerPaquete(categorias[0].id));
+  const [extrasIds, setExtrasIds] = useState([]);
   const [planId, setPlanId] = useState(""); // "" = sin plan anual
   const [planMensual, setPlanMensual] = useState(false);
   const [formaId, setFormaId] = useState(formasDePago[0].id);
@@ -40,6 +47,8 @@ function CotizadorPage() {
   const [empresa, setEmpresa] = useState("");
   const [correo, setCorreo] = useState("");
   const [errores, setErrores] = useState({ nombre: "", correo: "" });
+  const [generandoPdf, setGenerandoPdf] = useState(false);
+  const [errorPdf, setErrorPdf] = useState(false);
   const nombreRef = useRef(null);
   const correoRef = useRef(null);
 
@@ -51,24 +60,60 @@ function CotizadorPage() {
     };
   }, []);
 
-  // Cálculo de la cotización (se recalcula en cada render)
+  // Al cambiar de categoría se reinicia lo que depende de ella
+  const cambiarCategoria = (id) => {
+    setCategoriaId(id);
+    setPaqueteId(primerPaquete(id));
+    setExtrasIds([]);
+    setPlanId("");
+    setPlanMensual(false);
+  };
+
+  const alternarExtra = (id) =>
+    setExtrasIds((lista) =>
+      lista.includes(id) ? lista.filter((e) => e !== id) : [...lista, id]
+    );
+
+  // ---------- Cálculo de la cotización (se recalcula en cada render) ----------
+  const categoria = categorias.find((c) => c.id === categoriaId);
   const paquete = paquetes.find((p) => p.id === paqueteId);
-  const plan = planesAnuales.find((p) => p.id === planId);
-  const forma = formasDePago.find((f) => f.id === formaId);
+  const paquetesCategoria = paquetes.filter((p) => p.categoria === categoriaId);
+  const extrasCategoria = extras.filter((e) => e.categoria === categoriaId);
+  const esWeb = categoriaId === "web";
+
+  // Un extra que ya viene en el paquete no se cobra
+  const extraIncluido = (e) => e.incluidoEn.includes(paqueteId);
+  const extrasElegidos = extrasCategoria.filter(
+    (e) => extrasIds.includes(e.id) && !extraIncluido(e)
+  );
+  const totalExtras = extrasElegidos.reduce((s, e) => s + e.precio, 0);
+
+  const plan = esWeb ? planesAnuales.find((p) => p.id === planId) : undefined;
   const mensual = Boolean(plan) && planMensual; // el plan se paga mes a mes
 
-  const pagoUnico = paquete.precio;
-  const descuento = pagoUnico * forma.descuento; // solo sobre el paquete
+  const pagoUnico = paquete.precio + totalExtras;
+  // El plan en 3 pagos solo se ofrece en proyectos grandes
+  const formasDisponibles = formasDePago.filter(
+    (f) => !f.minimo || pagoUnico >= f.minimo
+  );
+  const forma =
+    formasDisponibles.find((f) => f.id === formaId) ?? formasDisponibles[0];
+
+  const descuento = pagoUnico * forma.descuento; // solo sobre el pago único
   const pagoAnual = plan && !mensual ? plan.precio : 0;
   const subtotal = pagoUnico - descuento + pagoAnual;
   const iva = factura ? subtotal * IVA : 0;
   const total = subtotal + iva;
-  const alIniciar = total * forma.anticipo;
-  const alEntregar = total - alIniciar;
+  const pagos = forma.partes.map((parte) => ({
+    nombre: parte.nombre,
+    pct: parte.pct,
+    monto: total * parte.pct,
+  }));
   // La mensualidad va aparte del total: se cobra cada mes
   const mensualidad = mensual ? plan.mensual * (factura ? 1 + IVA : 1) : 0;
 
   const pct = (valor) => `${Math.round(valor * 100)}%`;
+  const entrega = `${paquete.entrega} a partir de recibir tu material`;
 
   const hoy = new Date();
   const vence = new Date();
@@ -86,6 +131,74 @@ function CotizadorPage() {
   const salirDeCampo = (campo, valor) => {
     if (valor.trim()) {
       setErrores({ ...errores, [campo]: validar[campo](valor) });
+    }
+  };
+
+  const descargarPdf = async () => {
+    setGenerandoPdf(true);
+    setErrorPdf(false);
+    try {
+      // jsPDF (~300 KB) se descarga solo cuando alguien pide el PDF
+      const { descargarCotizacionPdf } = await import("../lib/cotizacionPdf");
+      // En el PDF va "-" y no "−": las fuentes de jsPDF no traen el signo menos
+      descargarCotizacionPdf({
+        emisor: { nombre: personalInfo.name, correo: personalInfo.email },
+        fecha: hoy.toLocaleDateString("es-MX", formatoFecha),
+        cliente: [nombre.trim() || "Por definir", empresa.trim(), correo.trim()]
+          .filter(Boolean)
+          .join(" · "),
+        filas: [
+          {
+            concepto: `${categoria.nombre}: paquete ${paquete.nombre} (pago único)`,
+            detalle: `${paquete.incluye.join(", ")}. Entrega: ${entrega}.`,
+            monto: dinero.format(paquete.precio),
+          },
+          ...extrasElegidos.map((e) => ({
+            concepto: `Extra: ${e.nombre}`,
+            detalle: e.descripcion,
+            monto: dinero.format(e.precio),
+          })),
+          descuento > 0 && {
+            concepto: `Descuento de contado (${pct(forma.descuento)})`,
+            monto: `-${dinero.format(descuento)}`,
+          },
+          plan && !mensual && {
+            concepto: `Plan anual: ${plan.nombre}`,
+            detalle: plan.descripcion,
+            monto: dinero.format(pagoAnual),
+          },
+          factura && {
+            concepto: `IVA (${pct(IVA)})`,
+            monto: dinero.format(iva),
+          },
+        ].filter(Boolean),
+        total: dinero.format(total),
+        pagos: [
+          ...pagos.map((p) => ({
+            concepto: `${p.nombre} (${pct(p.pct)})`,
+            monto: dinero.format(p.monto),
+          })),
+          mensual && {
+            concepto: `Plan mes a mes (12 pagos): ${plan.nombre}${factura ? " (con IVA)" : ""}`,
+            detalle: plan.descripcion,
+            monto: `${dinero.format(mensualidad)}/mes`,
+          },
+        ].filter(Boolean),
+        notas: [
+          ...categoria.incluye.map((t) => `${t}.`),
+          paquete.nota,
+          categoria.nota,
+          esWeb && !plan && `Sin plan anual: ${NOTA_SIN_PLAN}`,
+          `Forma de pago: ${forma.nombre}.`,
+          `Métodos de pago: ${METODOS_DE_PAGO}`,
+        ].filter(Boolean),
+        vigencia: `Cotización válida por ${VIGENCIA_DIAS} días, hasta el ${vence.toLocaleDateString("es-MX", formatoFecha)}.`,
+        archivo: "cotizacion-axel-cortes.pdf",
+      });
+    } catch {
+      setErrorPdf(true);
+    } finally {
+      setGenerandoPdf(false);
     }
   };
 
@@ -113,23 +226,24 @@ function CotizadorPage() {
       empresa.trim() ? `Empresa: ${empresa.trim()}` : null,
       `Correo: ${correo.trim()}`,
       "",
-      `Paquete ${paquete.nombre}: ${dinero.format(pagoUnico)} (pago único)`,
+      `${categoria.nombre}: paquete ${paquete.nombre}: ${dinero.format(paquete.precio)} (pago único)`,
+      ...extrasElegidos.map((e) => `Extra: ${e.nombre}: ${dinero.format(e.precio)}`),
+      `Entrega: ${entrega}`,
       descuento
         ? `Descuento de contado (${pct(forma.descuento)}): −${dinero.format(descuento)}`
         : null,
-      !plan
-        ? `Plan anual: sin plan. ${NOTA_SIN_PLAN}`
-        : mensual
-          ? `Plan: ${plan.nombre} (pago mensual)`
-          : `Plan anual: ${plan.nombre}: ${dinero.format(pagoAnual)}/año`,
+      !esWeb
+        ? null
+        : !plan
+          ? `Plan anual: sin plan. ${NOTA_SIN_PLAN}`
+          : mensual
+            ? `Plan: ${plan.nombre} (12 pagos mensuales)`
+            : `Plan anual: ${plan.nombre}: ${dinero.format(pagoAnual)}/año`,
       factura ? `IVA (${pct(IVA)}): ${dinero.format(iva)}` : null,
       `Total: ${dinero.format(total)}`,
       "",
       `Forma de pago: ${forma.nombre}`,
-      `Al iniciar (${pct(forma.anticipo)}): ${dinero.format(alIniciar)}`,
-      alEntregar
-        ? `A la entrega (${pct(1 - forma.anticipo)}): ${dinero.format(alEntregar)}`
-        : null,
+      ...pagos.map((p) => `${p.nombre} (${pct(p.pct)}): ${dinero.format(p.monto)}`),
       mensual
         ? `Mensualidad del plan${factura ? " (con IVA)" : ""}: ${dinero.format(mensualidad)}/mes`
         : null,
@@ -148,20 +262,43 @@ function CotizadorPage() {
     <>
       <Navbar />
       <main className="cotizador-page">
-        {/* ---------- Vista en pantalla ---------- */}
         <div className="cotizador-pantalla">
           <h1 className="cotizador-titulo">Arma tu cotización</h1>
           <p className="cotizador-intro">
-            Elige un paquete y, si lo necesitas, un plan anual. El total se
-            actualiza al momento.
+            Páginas web, juegos para celular y experiencias de realidad virtual.
+            Elige lo que necesitas, el total se actualiza al momento y puedes
+            descargarlo en PDF o enviármelo por WhatsApp.
           </p>
 
           <div className="cotizador-grid">
             <div className="cotizador-opciones">
               <fieldset className="cotizador-grupo">
-                <legend>1. Paquete de sitio web (pago único)</legend>
+                <legend>1. ¿Qué necesitas?</legend>
+                <div className="categorias">
+                  {categorias.map((c) => (
+                    <label
+                      key={c.id}
+                      className={`opcion categoria ${c.id === categoriaId ? "activa" : ""}`}
+                    >
+                      <input
+                        type="radio"
+                        name="categoria"
+                        value={c.id}
+                        checked={c.id === categoriaId}
+                        onChange={() => cambiarCategoria(c.id)}
+                      />
+                      <i className={c.icono} aria-hidden="true"></i>
+                      <span className="opcion-nombre">{c.nombre}</span>
+                      <span className="opcion-detalle">{c.descripcion}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <fieldset className="cotizador-grupo">
+                <legend>2. Paquete (pago único)</legend>
                 <div className="paquetes">
-                  {paquetes.map((p) => (
+                  {paquetesCategoria.map((p) => (
                     <label
                       key={p.id}
                       className={`opcion paquete ${p.id === paqueteId ? "activa" : ""}`}
@@ -177,6 +314,7 @@ function CotizadorPage() {
                       <span className="opcion-precio">
                         {dinero.format(p.precio)}
                       </span>
+                      <span className="paquete-resumen">{p.resumen}</span>
                       <ul>
                         {p.incluye.map((item) => (
                           <li key={item}>
@@ -185,81 +323,143 @@ function CotizadorPage() {
                           </li>
                         ))}
                       </ul>
+                      <span className="paquete-entrega">
+                        <i className="bx bx-time-five" aria-hidden="true"></i>{" "}
+                        Entrega: {p.entrega}
+                      </span>
+                      {p.nota && <span className="paquete-nota">{p.nota}</span>}
                     </label>
                   ))}
                 </div>
+                <div className="incluye-todos">
+                  <p>En todos los paquetes de {categoria.nombre.toLowerCase()}:</p>
+                  <ul>
+                    {categoria.incluye.map((item) => (
+                      <li key={item}>
+                        <i className="bx bx-check-shield" aria-hidden="true"></i>{" "}
+                        {item}.
+                      </li>
+                    ))}
+                  </ul>
+                  {categoria.nota && (
+                    <p className="incluye-nota">
+                      <i className="bx bx-info-circle" aria-hidden="true"></i>{" "}
+                      {categoria.nota}
+                    </p>
+                  )}
+                </div>
               </fieldset>
 
-              <fieldset className="cotizador-grupo">
-                <legend>2. Plan anual (opcional)</legend>
-                <label className={`opcion fila ${planId === "" ? "activa" : ""}`}>
-                  <input
-                    type="radio"
-                    name="plan"
-                    value=""
-                    checked={planId === ""}
-                    onChange={() => setPlanId("")}
-                    aria-describedby={planId === "" ? "nota-sin-plan" : undefined}
-                  />
-                  <span className="opcion-nombre">Sin plan anual</span>
-                </label>
-                {planId === "" && (
-                  <p id="nota-sin-plan" className="opcion-nota">
-                    <i className="bx bx-info-circle" aria-hidden="true"></i>{" "}
-                    {NOTA_SIN_PLAN}
-                  </p>
-                )}
-                {planesAnuales.map((p) => (
-                  <label
-                    key={p.id}
-                    className={`opcion fila ${p.id === planId ? "activa" : ""}`}
-                  >
+              {esWeb ? (
+                <fieldset className="cotizador-grupo">
+                  <legend>3. Plan anual (opcional)</legend>
+                  <label className={`opcion fila ${planId === "" ? "activa" : ""}`}>
                     <input
                       type="radio"
                       name="plan"
-                      value={p.id}
-                      checked={p.id === planId}
-                      onChange={() => setPlanId(p.id)}
+                      value=""
+                      checked={planId === ""}
+                      onChange={() => setPlanId("")}
+                      aria-describedby={planId === "" ? "nota-sin-plan" : undefined}
                     />
-                    <span className="opcion-nombre">{p.nombre}</span>
-                    <span className="opcion-precio">
-                      {dinero.format(p.precio)}/año
-                    </span>
+                    <span className="opcion-nombre">Sin plan anual</span>
                   </label>
-                ))}
-                {plan && (
-                  <label className={`opcion fila opcion-sub ${planMensual ? "activa" : ""}`}>
-                    <input
-                      type="checkbox"
-                      checked={planMensual}
-                      onChange={(e) => setPlanMensual(e.target.checked)}
-                    />
-                    <span className="opcion-nombre">Pagar el plan mes a mes</span>
-                    <span className="opcion-precio">
-                      {dinero.format(plan.mensual)}/mes
-                    </span>
-                  </label>
-                )}
-              </fieldset>
+                  {planId === "" && (
+                    <p id="nota-sin-plan" className="opcion-nota">
+                      <i className="bx bx-info-circle" aria-hidden="true"></i>{" "}
+                      {NOTA_SIN_PLAN}
+                    </p>
+                  )}
+                  {planesAnuales.map((p) => (
+                    <label
+                      key={p.id}
+                      className={`opcion fila ${p.id === planId ? "activa" : ""}`}
+                    >
+                      <input
+                        type="radio"
+                        name="plan"
+                        value={p.id}
+                        checked={p.id === planId}
+                        onChange={() => setPlanId(p.id)}
+                      />
+                      <span className="fila-texto">
+                        <span className="opcion-nombre">{p.nombre}</span>
+                        <span className="opcion-detalle">{p.descripcion}</span>
+                      </span>
+                      <span className="opcion-precio">
+                        {dinero.format(p.precio)}/año
+                      </span>
+                    </label>
+                  ))}
+                  {plan && (
+                    <label className={`opcion fila opcion-sub ${planMensual ? "activa" : ""}`}>
+                      <input
+                        type="checkbox"
+                        checked={planMensual}
+                        onChange={(e) => setPlanMensual(e.target.checked)}
+                      />
+                      <span className="fila-texto">
+                        <span className="opcion-nombre">Pagar el plan mes a mes</span>
+                        <span className="opcion-detalle">
+                          12 pagos de {dinero.format(plan.mensual)} (
+                          {dinero.format(plan.mensual * 12)} al año en lugar de{" "}
+                          {dinero.format(plan.precio)})
+                        </span>
+                      </span>
+                      <span className="opcion-precio">
+                        {dinero.format(plan.mensual)}/mes
+                      </span>
+                    </label>
+                  )}
+                </fieldset>
+              ) : (
+                <fieldset className="cotizador-grupo">
+                  <legend>3. Extras (opcional)</legend>
+                  {extrasCategoria.map((e) => {
+                    const incluido = extraIncluido(e);
+                    const marcado = incluido || extrasIds.includes(e.id);
+                    return (
+                      <label
+                        key={e.id}
+                        className={`opcion fila ${marcado ? "activa" : ""} ${incluido ? "incluido" : ""}`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={marcado}
+                          disabled={incluido}
+                          onChange={() => alternarExtra(e.id)}
+                        />
+                        <span className="fila-texto">
+                          <span className="opcion-nombre">{e.nombre}</span>
+                          <span className="opcion-detalle">{e.descripcion}</span>
+                        </span>
+                        <span className="opcion-precio">
+                          {incluido ? "Incluido" : `+${dinero.format(e.precio)}`}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </fieldset>
+              )}
 
               <fieldset className="cotizador-grupo">
-                <legend>3. Forma de pago</legend>
-                {formasDePago.map((f) => (
+                <legend>4. Forma de pago</legend>
+                {formasDisponibles.map((f) => (
                   <label
                     key={f.id}
-                    className={`opcion fila ${f.id === formaId ? "activa" : ""}`}
+                    className={`opcion fila ${f.id === forma.id ? "activa" : ""}`}
                   >
                     <input
                       type="radio"
                       name="forma"
                       value={f.id}
-                      checked={f.id === formaId}
+                      checked={f.id === forma.id}
                       onChange={() => setFormaId(f.id)}
                     />
                     <span className="opcion-nombre">{f.nombre}</span>
                     {f.descuento > 0 && (
                       <span className="opcion-precio">
-                        −{pct(f.descuento)} en el paquete
+                        −{pct(f.descuento)} en el pago único
                       </span>
                     )}
                   </label>
@@ -267,7 +467,7 @@ function CotizadorPage() {
               </fieldset>
 
               <fieldset className="cotizador-grupo">
-                <legend>4. Facturación</legend>
+                <legend>5. Facturación</legend>
                 <label className={`opcion fila ${factura ? "activa" : ""}`}>
                   <input
                     type="checkbox"
@@ -275,13 +475,13 @@ function CotizadorPage() {
                     onChange={(e) => setFactura(e.target.checked)}
                   />
                   <span className="opcion-nombre">
-                    Requiero factura (+{pct(IVA)} IVA)
+                    Necesito factura (se agrega {pct(IVA)} de IVA)
                   </span>
                 </label>
               </fieldset>
 
               <fieldset className="cotizador-grupo">
-                <legend>5. Tus datos</legend>
+                <legend>6. Tus datos</legend>
                 <p className="campos-nota">
                   Los campos con <span aria-hidden="true">*</span> son
                   obligatorios.
@@ -367,21 +567,28 @@ function CotizadorPage() {
               {/* Solo para lectores de pantalla: anuncia el total cuando cambia */}
               <p className="sr-only" aria-live="polite" aria-atomic="true">
                 Total {dinero.format(total)}, al iniciar{" "}
-                {dinero.format(alIniciar)}
+                {dinero.format(pagos[0].monto)}
                 {mensual && `, más ${dinero.format(mensualidad)} al mes`}
               </p>
+              <p className="resumen-categoria">{categoria.nombre}</p>
               <dl>
-                <dt>Pago único ({paquete.nombre})</dt>
-                <dd>{dinero.format(pagoUnico)}</dd>
+                <dt>Paquete {paquete.nombre}</dt>
+                <dd>{dinero.format(paquete.precio)}</dd>
+                {extrasElegidos.map((e) => (
+                  <div key={e.id} className="resumen-extra">
+                    <dt>{e.nombre}</dt>
+                    <dd>{dinero.format(e.precio)}</dd>
+                  </div>
+                ))}
                 {descuento > 0 && (
                   <>
                     <dt>Descuento de contado ({pct(forma.descuento)})</dt>
                     <dd className="descuento">−{dinero.format(descuento)}</dd>
                   </>
                 )}
-                {!mensual && (
+                {esWeb && !mensual && (
                   <>
-                    <dt>Pago anual</dt>
+                    <dt>Plan anual</dt>
                     <dd>{plan ? dinero.format(pagoAnual) : "—"}</dd>
                   </>
                 )}
@@ -393,14 +600,14 @@ function CotizadorPage() {
                 )}
                 <dt className="total">Total</dt>
                 <dd className="total">{dinero.format(total)}</dd>
-                <dt>Al iniciar ({pct(forma.anticipo)})</dt>
-                <dd>{dinero.format(alIniciar)}</dd>
-                {alEntregar > 0 && (
-                  <>
-                    <dt>A la entrega ({pct(1 - forma.anticipo)})</dt>
-                    <dd>{dinero.format(alEntregar)}</dd>
-                  </>
-                )}
+                {pagos.map((p) => (
+                  <div key={p.nombre} className="resumen-extra">
+                    <dt>
+                      {p.nombre} ({pct(p.pct)})
+                    </dt>
+                    <dd>{dinero.format(p.monto)}</dd>
+                  </div>
+                ))}
                 {mensual && (
                   <>
                     <dt className="mensualidad">
@@ -412,6 +619,16 @@ function CotizadorPage() {
                   </>
                 )}
               </dl>
+              <p className="resumen-entrega">
+                <i className="bx bx-time-five" aria-hidden="true"></i> Entrega
+                estimada: {paquete.entrega}
+              </p>
+              {categoria.nota && (
+                <p className="metodos-pago">
+                  <i className="bx bx-info-circle" aria-hidden="true"></i>{" "}
+                  {categoria.nota}
+                </p>
+              )}
               <p className="metodos-pago">
                 <i className="bx bx-credit-card" aria-hidden="true"></i>{" "}
                 {METODOS_DE_PAGO}
@@ -426,12 +643,20 @@ function CotizadorPage() {
                   type="button"
                   size="lg"
                   variant="neon"
-                  onClick={() => window.print()}
+                  onClick={descargarPdf}
+                  disabled={generandoPdf}
+                  aria-busy={generandoPdf}
                 >
                   <i className="bx bx-download" aria-hidden="true"></i>{" "}
-                  Descargar PDF
+                  {generandoPdf ? "Generando PDF…" : "Descargar PDF"}
                 </Button>
               </div>
+              {errorPdf && (
+                <p className="campo-error" role="alert">
+                  <i className="bx bx-error-circle" aria-hidden="true"></i> No se
+                  pudo generar el PDF. Revisa tu conexión e inténtalo de nuevo.
+                </p>
+              )}
             </aside>
           </div>
 
@@ -443,92 +668,6 @@ function CotizadorPage() {
             <a href="#resumen">Ver resumen</a>
           </div>
         </div>
-
-        {/* ---------- Hoja que solo aparece al imprimir / PDF ---------- */}
-        <section className="hoja-impresion">
-          <header>
-            <h1>Cotización</h1>
-            <p>
-              <strong>{personalInfo.name}</strong> · {personalInfo.email}
-            </p>
-            <p>Fecha: {hoy.toLocaleDateString("es-MX", formatoFecha)}</p>
-          </header>
-
-          <p>
-            <strong>Cliente:</strong> {nombre || "—"}
-            {empresa && ` · ${empresa}`}
-            {correo && ` · ${correo}`}
-          </p>
-
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  Paquete {paquete.nombre} (pago único)
-                  <small>{paquete.incluye.join(", ")}</small>
-                </td>
-                <td>{dinero.format(pagoUnico)}</td>
-              </tr>
-              {descuento > 0 && (
-                <tr>
-                  <td>Descuento de contado ({pct(forma.descuento)})</td>
-                  <td>−{dinero.format(descuento)}</td>
-                </tr>
-              )}
-              {plan && !mensual && (
-                <tr>
-                  <td>Plan anual: {plan.nombre}</td>
-                  <td>{dinero.format(pagoAnual)}</td>
-                </tr>
-              )}
-              {factura && (
-                <tr>
-                  <td>IVA ({pct(IVA)})</td>
-                  <td>{dinero.format(iva)}</td>
-                </tr>
-              )}
-              <tr className="total">
-                <td>Total</td>
-                <td>{dinero.format(total)}</td>
-              </tr>
-              <tr>
-                <td>Al iniciar ({pct(forma.anticipo)})</td>
-                <td>{dinero.format(alIniciar)}</td>
-              </tr>
-              {alEntregar > 0 && (
-                <tr>
-                  <td>A la entrega ({pct(1 - forma.anticipo)})</td>
-                  <td>{dinero.format(alEntregar)}</td>
-                </tr>
-              )}
-              {mensual && (
-                <tr>
-                  <td>
-                    Plan mes a mes: {plan.nombre}
-                    {factura && " (con IVA)"}
-                  </td>
-                  <td>{dinero.format(mensualidad)}/mes</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-
-          {!plan && (
-            <p>
-              <strong>Sin plan anual:</strong> {NOTA_SIN_PLAN}
-            </p>
-          )}
-          <p>
-            <strong>Forma de pago:</strong> {forma.nombre}.
-            <br />
-            <strong>Métodos de pago:</strong> {METODOS_DE_PAGO}
-          </p>
-
-          <p className="vigencia">
-            Cotización válida por {VIGENCIA_DIAS} días, hasta el{" "}
-            {vence.toLocaleDateString("es-MX", formatoFecha)}.
-          </p>
-        </section>
       </main>
       <Footer />
     </>
