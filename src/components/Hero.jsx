@@ -4,6 +4,8 @@ import { motion as Motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import profilePic from "../assets/perfil.webp";
 import { personalInfo } from "../data/info";
+import Aurora from "./Aurora";
+import { ease, fadeUp as item, stagger } from "@/lib/motion";
 
 const redes = [
   { label: "GitHub", href: personalInfo.github, icon: "bx bxl-github" },
@@ -11,17 +13,8 @@ const redes = [
   { label: "Correo", href: `mailto:${personalInfo.email}`, icon: "bx bx-envelope" },
 ];
 
-const ease = [0.22, 1, 0.36, 1];
-
 // El contenedor escalona a sus hijos; cada hijo sube y se enfoca
-const contenedor = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.5 } },
-};
-const item = {
-  hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease } },
-};
+const contenedor = stagger(0.12, 0.5);
 const letra = {
   hidden: { opacity: 0, y: "0.6em", rotateX: -80 },
   show: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.7, ease } },
@@ -41,11 +34,7 @@ function Hero({ name, title }) {
       id="hero"
       className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-5 pt-28 pb-24 md:px-[8%]"
     >
-      {/* Aura de fondo */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-[10%] left-[10%] size-[40vmax] animate-aurora rounded-full bg-primary/15 blur-[120px] motion-reduce:animate-none" />
-        <div className="absolute right-[5%] bottom-[5%] size-[35vmax] animate-aurora rounded-full bg-[#7c3aed]/20 blur-[120px] [animation-delay:-9s] motion-reduce:animate-none" />
-      </div>
+      <Aurora />
 
       <Motion.div
         style={{ y, opacity }}

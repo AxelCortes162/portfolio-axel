@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { motion as Motion } from "framer-motion";
 import Card from "../components/Card";
+import Aurora from "../components/Aurora";
+import { fadeUp, stagger } from "@/lib/motion";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { personalInfo } from "../data/info";
 import "../styles/ContactPage.css";
+
+const titulo = "¡Hablemos de tu próximo proyecto!";
 
 const alertaBase = {
   background: "#0f172a",
@@ -76,15 +81,25 @@ function ContactPage() {
   return (
     <>
       <Navbar />
-      <main className="page-center">
+      <main className="page-center relative overflow-hidden">
+        <Aurora />
         <div className="contacto-full">
           <Card>
-            <h1 className="titulo-contacto">
-              ¡Hablemos de tu próximo proyecto!
-            </h1>
+            {/* Palabras separadas solo para la vista; se lee el aria-label */}
+            <Motion.h1
+              aria-label={titulo}
+              variants={stagger(0.06)}
+              className="titulo-contacto"
+            >
+              {titulo.split(" ").map((palabra, i) => (
+                <Motion.span key={i} aria-hidden="true" variants={fadeUp} className="inline-block">
+                  {palabra}&nbsp;
+                </Motion.span>
+              ))}
+            </Motion.h1>
 
             <form className="formulario" onSubmit={handleSubmit} noValidate>
-              <div className="campo">
+              <Motion.div variants={fadeUp} className="campo">
                 <label htmlFor="name">
                   <i className="bx bx-user" aria-hidden="true"></i> Nombre
                   completo
@@ -97,9 +112,9 @@ function ContactPage() {
                   autoComplete="name"
                   required
                 />
-              </div>
+              </Motion.div>
 
-              <div className="campo">
+              <Motion.div variants={fadeUp} className="campo">
                 <label htmlFor="email">
                   <i className="bx bx-envelope" aria-hidden="true"></i> Correo
                   electrónico
@@ -112,9 +127,9 @@ function ContactPage() {
                   autoComplete="email"
                   required
                 />
-              </div>
+              </Motion.div>
 
-              <div className="campo">
+              <Motion.div variants={fadeUp} className="campo">
                 <label htmlFor="phone">
                   <i className="bx bx-phone" aria-hidden="true"></i> Teléfono{" "}
                   <span className="campo-opcional">(opcional)</span>
@@ -129,9 +144,9 @@ function ContactPage() {
                   pattern="[0-9\s()+-]{7,20}"
                   maxLength="20"
                 />
-              </div>
+              </Motion.div>
 
-              <div className="campo">
+              <Motion.div variants={fadeUp} className="campo">
                 <label htmlFor="message">
                   <i className="bx bx-message-detail" aria-hidden="true"></i>{" "}
                   Mensaje
@@ -143,9 +158,11 @@ function ContactPage() {
                   placeholder="¿En qué puedo ayudarte?"
                   required
                 ></textarea>
-              </div>
+              </Motion.div>
 
-              <button
+              <Motion.button
+                variants={fadeUp}
+                whileTap={enviando ? undefined : { scale: 0.97 }}
                 type="submit"
                 className="btn-enviar"
                 disabled={enviando}
@@ -159,14 +176,14 @@ function ContactPage() {
                     <i className="bx bx-send" aria-hidden="true"></i>
                   </>
                 )}
-              </button>
+              </Motion.button>
             </form>
 
-            <div className="whatsapp-divider">
+            <Motion.div variants={fadeUp} className="whatsapp-divider">
               <span>O TAMBIÉN</span>
-            </div>
+            </Motion.div>
 
-            <div className="whatsapp-section">
+            <Motion.div variants={fadeUp} className="whatsapp-section">
               <a
                 href={`${personalInfo.whatsapp}?text=${encodeURIComponent(
                   "¡Hola! Estoy interesado en tu trabajo."
@@ -183,7 +200,7 @@ function ContactPage() {
               >
                 <i className="bx bx-envelope" aria-hidden="true"></i> CORREO
               </a>
-            </div>
+            </Motion.div>
           </Card>
         </div>
       </main>

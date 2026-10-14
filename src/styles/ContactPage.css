@@ -238,3 +238,77 @@
     gap: 10px;
   }
 }
+/* ============================================================
+   MICROINTERACCIONES
+   ============================================================ */
+
+/* El icono de la etiqueta reacciona cuando su campo tiene el foco */
+.campo label i {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), text-shadow 0.35s;
+}
+
+.campo:focus-within label i {
+  transform: scale(1.25) rotate(-10deg);
+  text-shadow: 0 0 10px #00ffd5;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  background: rgba(0, 255, 213, 0.04);
+  box-shadow: 0 0 0 4px rgba(0, 255, 213, 0.08), 0 8px 24px rgba(0, 255, 213, 0.12);
+}
+
+/* Destello que cruza el botón de enviar */
+.btn-enviar {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-enviar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-enviar:hover:not(:disabled)::before {
+  transform: translateX(120%);
+}
+
+/* El avión de papel "despega" */
+.btn-enviar i {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-enviar:hover:not(:disabled) i {
+  transform: translate(4px, -3px) rotate(-20deg);
+}
+
+
+.btn-whatsapp:hover i {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+@keyframes wiggle {
+  25% { transform: rotate(-15deg); }
+  50% { transform: rotate(12deg); }
+  75% { transform: rotate(-6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campo:focus-within label i,
+  .btn-enviar:hover:not(:disabled) i,
+  .btn-whatsapp:hover {
+    transform: none;
+  }
+
+  .btn-whatsapp:hover i {
+    animation: none;
+  }
+
+  .btn-enviar::before {
+    display: none;
+  }
+}
