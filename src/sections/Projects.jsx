@@ -4,7 +4,7 @@ import SectionTitle from "../components/SectionTitle";
 import ProjectModal from "../components/ProjectModal";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, trackPointer } from "@/lib/utils";
 import { projectsData } from "../assets/projects/projectsData";
 
 const categorias = [
@@ -32,7 +32,7 @@ const pausar = (e) => {
   }
 };
 
-function ProjectCard({ project, onOpen }) {
+function ProjectCard({ project, onOpen, index }) {
   const vertical = project.format === "vertical";
 
   // "Enlace estirado": el botón/enlace del título cubre toda la tarjeta con
@@ -42,13 +42,14 @@ function ProjectCard({ project, onOpen }) {
 
   return (
     <Motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.7, delay: (index % 3) * 0.12, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={reproducir}
       onMouseLeave={pausar}
-      className="group relative flex w-full max-w-[400px] flex-col rounded-2xl border border-primary/30 bg-white/5 p-5 transition-[transform,box-shadow] duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgb(0_255_213/0.35)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-primary motion-reduce:hover:translate-y-0"
+      onMouseMove={trackPointer}
+      className="spotlight group relative flex w-full max-w-[400px] flex-col rounded-2xl border border-primary/30 bg-white/5 p-5 transition-[translate,box-shadow,border-color] duration-500 ease-out hover:-translate-y-2 hover:border-primary/60 hover:shadow-[0_20px_40px_-10px_rgb(0_255_213/0.35)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-primary motion-reduce:hover:translate-y-0"
     >
       <div
         className={cn(
@@ -62,7 +63,7 @@ function ProjectCard({ project, onOpen }) {
           loading="lazy"
           decoding="async"
           className={cn(
-            "absolute h-full",
+            "absolute h-full transition-transform duration-700 ease-out group-hover:scale-105",
             vertical ? "w-auto object-contain" : "w-full object-cover"
           )}
         />
@@ -154,6 +155,7 @@ function ProjectCard({ project, onOpen }) {
 function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [tab, setTab] = useState("games");
 
   const abrir = (project) => {
     setSelectedProject(project);
@@ -166,14 +168,22 @@ function Projects() {
         Mis <span>Proyectos</span>
       </SectionTitle>
 
-      <Tabs defaultValue="games" className="w-full items-center gap-0">
+      <Tabs value={tab} onValueChange={setTab} className="w-full items-center gap-0">
         <TabsList className="mb-12 gap-2 bg-transparent p-0 group-data-[orientation=horizontal]/tabs:h-auto">
           {categorias.map((cat) => (
             <TabsTrigger
               key={cat.id}
               value={cat.id}
-              className="h-11 flex-none rounded-xl border-white/10 bg-white/[0.02] px-5 font-semibold data-[state=active]:border-primary/40 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-[0_0_15px_rgb(0_255_213/0.1)] max-sm:px-4 max-sm:text-xs"
+              className="isolate h-11 flex-none rounded-xl border-white/10 bg-white/[0.02] px-5 font-semibold data-[state=active]:border-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary max-sm:px-4 max-sm:text-xs"
             >
+              {/* La píldora activa se desliza de una pestaña a otra */}
+              {tab === cat.id && (
+                <Motion.span
+                  layoutId="tab-activa"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                  className="absolute inset-0 -z-10 rounded-xl border border-primary/40 bg-primary/10 shadow-[0_0_15px_rgb(0_255_213/0.15)]"
+                />
+              )}
               <i className={`${cat.icon} text-lg`} aria-hidden="true"></i>
               {cat.label}
             </TabsTrigger>
@@ -188,8 +198,8 @@ function Projects() {
           >
             {projectsData
               .filter((project) => project.category === cat.id)
-              .map((project) => (
-                <ProjectCard key={project.id} project={project} onOpen={abrir} />
+              .map((project, i) => (
+                <ProjectCard key={project.id} project={project} onOpen={abrir} index={i} />
               ))}
           </TabsContent>
         ))}

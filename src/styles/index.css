@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "lenis/dist/lenis.css";
 /* En capa base: si quedara sin capa, su reset (* { padding: 0 }) anularía las utilidades */
 @import "./global.css" layer(base);
 
@@ -57,6 +58,20 @@
 /* Flotación suave (ease-out-quart) para el indicador de scroll del Hero */
 @theme {
   --animate-float: float 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  --animate-spin-slow: spin 8s linear infinite;
+  --animate-aurora: aurora 18s ease-in-out infinite alternate;
+
+  @keyframes aurora {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(8%, -6%) scale(1.15);
+    }
+    100% {
+      transform: translate(-6%, 8%) scale(0.95);
+    }
+  }
 
   @keyframes float {
     0%,
@@ -86,4 +101,13 @@
   h6 {
     font-weight: 700;
   }
+}
+
+/* Brillo que sigue al cursor; --x/--y los pone trackPointer() */
+@utility spotlight {
+  background-image: radial-gradient(
+    450px circle at var(--x, -999px) var(--y, -999px),
+    rgb(0 255 213 / 0.1),
+    transparent 45%
+  );
 }

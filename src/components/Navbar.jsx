@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion as Motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../styles/Navbar.css";
 import logo from "../assets/logo.svg";
@@ -10,6 +11,14 @@ function Navbar() {
 
   // Fuera del inicio (contacto, cotizador) los enlaces #skills, #projects no sirven
   const isSubPage = location.pathname !== "/";
+
+  // Se esconde al bajar y reaparece al subir
+  const [oculto, setOculto] = useState(false);
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setOculto(y > prev && y > 200);
+  });
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -37,7 +46,12 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar">
+    <Motion.nav
+      className="navbar"
+      initial={{ y: "-100%" }}
+      animate={{ y: oculto && !isOpen ? "-100%" : 0 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    >
       {/* Logo: Siempre a la izquierda */}
       <Link to="/" onClick={handleHomeClick} aria-label="Ir al inicio">
         <img
@@ -93,7 +107,7 @@ function Navbar() {
           </ul>
         </>
       )}
-    </nav>
+    </Motion.nav>
   );
 }
 

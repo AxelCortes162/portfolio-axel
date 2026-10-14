@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 function ProjectModal({ project, open, onOpenChange }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="block max-h-[90dvh] gap-0 overflow-y-auto rounded-3xl border-primary/20 bg-slate-900 p-0 shadow-[0_25px_50px_rgb(0_0_0/0.6),0_0_40px_rgb(0_255_213/0.1)] [scrollbar-color:rgb(0_255_213/0.3)_transparent] [scrollbar-width:thin] sm:max-w-3xl [&>[data-slot=dialog-close]]:grid [&>[data-slot=dialog-close]]:size-11 [&>[data-slot=dialog-close]]:place-items-center [&>[data-slot=dialog-close]]:rounded-full [&>[data-slot=dialog-close]]:bg-slate-900/80 [&>[data-slot=dialog-close]]:opacity-100 [&>[data-slot=dialog-close]_svg]:size-5">
+      <DialogContent data-lenis-prevent className="block max-h-[90dvh] gap-0 overflow-y-auto rounded-3xl border-primary/20 bg-slate-900 p-0 shadow-[0_25px_50px_rgb(0_0_0/0.6),0_0_40px_rgb(0_255_213/0.1)] [scrollbar-color:rgb(0_255_213/0.3)_transparent] [scrollbar-width:thin] sm:max-w-3xl [&>[data-slot=dialog-close]]:grid [&>[data-slot=dialog-close]]:size-11 [&>[data-slot=dialog-close]]:place-items-center [&>[data-slot=dialog-close]]:rounded-full [&>[data-slot=dialog-close]]:bg-slate-900/80 [&>[data-slot=dialog-close]]:opacity-100 [&>[data-slot=dialog-close]_svg]:size-5">
         {project && (
           <>
             {project.videoPreview && (

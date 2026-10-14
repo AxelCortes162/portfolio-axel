@@ -170,3 +170,26 @@
     height: 40px; /* Logo un poco más pequeño en móvil */
   }
 }
+/* Subrayado neón que crece desde el centro */
+.menu li a {
+  position: relative;
+}
+
+.menu li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  background: #00ffd5;
+  box-shadow: 0 0 8px #00ffd5;
+  transform: scaleX(0);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menu li a:hover::after,
+.menu li a:focus-visible::after {
+  transform: scaleX(1);
+}

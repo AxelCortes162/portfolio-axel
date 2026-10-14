@@ -1,4 +1,15 @@
+import { motion as Motion } from "framer-motion";
 import SectionTitle from "../components/SectionTitle";
+import { trackPointer } from "@/lib/utils";
+
+const tarjeta = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+const chip = {
+  hidden: { opacity: 0, y: 12, scale: 0.9 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 300, damping: 22 } },
+};
 
 const grupos = [
   {
@@ -44,32 +55,44 @@ function Skills() {
       </SectionTitle>
 
       {/* flex-wrap: si una tarjeta queda sola en su fila, ocupa todo el ancho */}
-      <div className="mx-auto flex max-w-6xl flex-wrap gap-6">
+      <Motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
+        variants={{ show: { transition: { staggerChildren: 0.15 } } }}
+        className="mx-auto flex max-w-6xl flex-wrap gap-6"
+      >
         {grupos.map((grupo) => (
-          <div
+          <Motion.div
             key={grupo.titulo}
-            className="relative flex-[1_1_300px] overflow-hidden rounded-3xl border border-primary/10 bg-card p-8 text-center backdrop-blur-md transition-colors duration-300 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-linear-to-r before:from-transparent before:via-primary before:to-transparent before:opacity-50 hover:border-primary/40 max-sm:p-6"
+            variants={tarjeta}
+            onMouseMove={trackPointer}
+            className="spotlight relative flex-[1_1_300px] overflow-hidden rounded-3xl border border-primary/10 bg-card p-8 text-center backdrop-blur-md transition-[border-color,box-shadow] duration-300 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-linear-to-r before:from-transparent before:via-primary before:to-transparent before:opacity-50 hover:border-primary/40 hover:shadow-[0_0_40px_rgb(0_255_213/0.08)] max-sm:p-6"
           >
             <h3 className="mb-6 font-display text-xl font-semibold tracking-wide">
               {grupo.titulo}
             </h3>
-            <ul className="flex flex-wrap justify-center gap-3">
+            <Motion.ul
+              variants={{ show: { transition: { staggerChildren: 0.05, delayChildren: 0.2 } } }}
+              className="flex flex-wrap justify-center gap-3"
+            >
               {grupo.skills.map((skill) => (
-                <li
+                <Motion.li
                   key={skill.name}
-                  className="flex items-center gap-2.5 rounded-xl border border-white/5 bg-primary/[0.03] px-4 py-2.5 text-sm font-medium text-slate-200"
+                  variants={chip}
+                  className="group flex items-center gap-2.5 rounded-xl border border-white/5 bg-primary/[0.03] px-4 py-2.5 text-sm font-medium text-slate-200 transition-[border-color,background-color,box-shadow,translate] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary/10 hover:shadow-[0_6px_20px_rgb(0_255_213/0.15)]"
                 >
                   <i
-                    className={`${skill.icon} text-xl text-primary`}
+                    className={`${skill.icon} text-xl text-primary transition-transform duration-300 group-hover:scale-125 group-hover:-rotate-12`}
                     aria-hidden="true"
                   ></i>
                   {skill.name}
-                </li>
+                </Motion.li>
               ))}
-            </ul>
-          </div>
+            </Motion.ul>
+          </Motion.div>
         ))}
-      </div>
+      </Motion.div>
     </section>
   );
 }

@@ -16,6 +16,11 @@ html {
   scroll-padding-top: 110px;
 }
 
+/* Con Lenis activo el scroll suave lo hace Lenis; los dos juntos se pelean */
+html.lenis {
+  scroll-behavior: auto;
+}
+
 body {
   font-family:
     system-ui,
