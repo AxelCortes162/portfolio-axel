@@ -14,6 +14,8 @@ html {
   scroll-behavior: smooth;
   /* Compensa el navbar fijo al saltar a #skills, #education, #projects */
   scroll-padding-top: 110px;
+  /* Evita que el menú oculto o las animaciones laterales ensanchen la página en móvil */
+  overflow-x: clip;
 }
 
 /* Con Lenis activo el scroll suave lo hace Lenis; los dos juntos se pelean */
@@ -32,7 +34,7 @@ body {
   background: radial-gradient(circle at top, #0f172a, #020617);
   color: white;
   min-height: 100dvh;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
